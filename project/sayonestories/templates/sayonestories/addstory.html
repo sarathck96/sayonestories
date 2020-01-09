@@ -1,0 +1,89 @@
+
+{% extends 'base_layout.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+                <!-- Brand/logo -->
+                <a class="navbar-brand" href="#">
+                  <img src="{{img_url.url}}" alt="Sayone" class="rounded-circle" style="width:130px;height:100px;">
+                    {{user.sayone_user.name}}
+                </a>
+
+
+                <!-- Links -->
+                <ul class="navbar-nav">
+
+                  <li class="nav-item">
+                    <a class="nav-link" >My Profile </a>
+                  </li>
+ <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                  </li>
+                </ul>
+              </nav>
+            {% if story %}
+            story title :{{story.story_title }}<br>
+            story type :{% if story.story_type == 0 %} Event
+                        {% elif story.story_type == 1 %}Blog
+                        {% elif story.story_type == 2 %} Pic Gallery
+                        {% endif %} <br>
+            Date created {{ story.date_created }}
+            Author {{story.story_author }}
+
+            {% endif %}
+            {% if form %}
+            <form method="POST" action="{% url 'add_story' %}" >
+                {% csrf_token %}
+            {{form}}
+                <button type="submit">Add</button>
+            </form>
+            {% endif %}
+
+
+            {% if form1 %}
+            <form method="POST" action="{% url 'add_blog' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% if story %}
+                <input type="hidden" value="{{story.story_id}}" name="storyid">
+                {% endif %}
+            {{form1}}
+                <button type="submit">Add</button>
+            </form>
+            {% endif %}
+
+
+            {% if form2 %}
+            <button type="button" class="btn btn-primary js-upload-photos">
+  <span class="glyphicon glyphicon-cloud-upload"></span> Upload photos
+</button>
+            <input id="fileupload" type="file" name="file" multiple
+       style="display: none;"
+       data-url="{% url 'basic_upload' story.story_id %}"
+       data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+            <table id="gallery" class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Photo</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for photo in photos %}
+      <tr>
+        <td><a href="{{ photo.file.url }}">{{ photo.file.name }}</a></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

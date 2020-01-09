@@ -1,0 +1,21 @@
+{% extends 'base_layout.html' %}
+{% load static %}
+
+{% block content %}
+
+{% for story in stories %}
+
+<div class="card">
+    <div class="card-body"><a href="{% url 'story_detail_page' story.story_id %}"<h3>{{story.story_title}}</h3></a>
+  <h4>   {% if story.story_type == 0 %} Event
+                        {% elif story.story_type == 1 %}Blog
+                        {% elif story.story_type == 2 %} Pic Gallery
+                        {% endif %}</h4>
+  <h4>{{story.story_author}}</h4>
+        <h4>{{story.date_created}}</h4>
+  </div>
+</div>
+
+{% endfor %}
+
+{% endblock %}
