@@ -69,13 +69,10 @@ def validate_register(request):
 def User_profile_page(request):
     pic_url = request.user.sayone_user.profile_pic
     story_object_for_user = Story.objects.filter(story_user=request.user)
-    for item in story_object_for_user:
-        print('item', item, 'blogs', item.blog_story.all())
 
-    for item in story_object_for_user:
-        print('story', item.image_story.all())
+    all_story_objects = Story.objects.all().order_by('-date_created')
 
-    return render(request, 'sayonestories/UserHome.html', context={'img_url': pic_url})
+    return render(request, 'sayonestories/UserHome.html', context={'img_url': pic_url,'stories':all_story_objects})
 
 
 def add_story_page(request):

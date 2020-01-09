@@ -1,6 +1,9 @@
 
 {% extends 'base_layout.html' %}
 {% load static %}
+
+
+
 {% block content %}
 <div class="container-fluid">
     <div class="row">
@@ -17,7 +20,7 @@
                 <ul class="navbar-nav">
 
                   <li class="nav-item">
-                    <a class="nav-link" >My Profile </a>
+                    <a class="nav-link title" >My Profile </a>
                   </li>
                     <li class="nav-item">
                     <a class="nav-link" href="{% url 'add_story_page' %}" >Add Story</a>
@@ -25,12 +28,24 @@
  <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Logout</a>
                   </li>
-                     <li class="nav-item">
+                     <li class="nav-item ">
                     <a class="nav-link" href="{% url 'user_stories_page' %}">My Stories</a>
                   </li>
                 </ul>
               </nav>
 
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            {% for story in stories %}
+            <div class="card">
+                <div class="card-body"><a href="{% url 'story_detail_page' story.story_id%}"><h4 >{{story.story_title}}</h4></a>
+                    <h4 >{{story.story_author}}</h4><br>
+                    <h4 >{{story.date_created}}</h4>
+                </div>
+</div>
+            {% endfor %}
         </div>
     </div>
 </div>
