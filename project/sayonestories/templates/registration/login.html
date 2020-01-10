@@ -1,5 +1,10 @@
 {% extends 'base_layout.html'  %}
 {% load static %}
+
+
+
+
+
 {% block content %}
 <div class="container-fluid">
     <div class="row">
@@ -24,16 +29,27 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row pt-5">
         <div class="col-3"></div>
-        <div class="col-6">
+        <div class="col-6 rounded-sm" >
 <form method="POST" >
-    {% csrf_token %}
-    {{ form.as_p}}
-    <button type="submit">SIGN IN</button>
+   {% csrf_token %}
+     {% for field in form %}
+    <div class="form-group">
+        {{ field.errors }}
+        {{ field.label_tag }} {{ field }}
+
+    </div>
+{% endfor %}
+    <button type="submit">LOGIN</button>
 </form>
+
+
         </div>
         <div class="col-3"></div>
     </div>
 </div>
+
+
+
 {% endblock %}
