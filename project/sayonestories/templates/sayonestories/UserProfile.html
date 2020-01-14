@@ -1,0 +1,81 @@
+{% extends 'base_layout.html' %}
+{% load static %}
+{% block addcss %}
+<link rel="stylesheet" href="{% static 'css/profilepic.css' %}">
+
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+               <!-- Brand/logo -->
+               <a class="navbar-brand" href="#">
+                 <img src="{{img_url.url}}" alt="Sayone" class="rounded-circle" style="width:130px;height:100px;">
+                   {{user.sayone_user.name}}
+               </a>
+
+
+               <!-- Links -->
+               <ul class="navbar-nav ml-auto">
+
+                 <li class="nav-item">
+                   <a class="nav-link lora" >My Profile </a>
+                 </li>
+                   <li class="nav-item">
+                   <a class="nav-link lora" href="{% url 'add_story_page' %}" >Add Story</a>
+                 </li>
+<li class="nav-item">
+                   <a class="nav-link lora" href="{% url 'logout' %}">Logout</a>
+                 </li>
+                    <li class="nav-item ">
+                   <a class="nav-link lora" href="{% url 'user_stories_page' %}">My Stories</a>
+                 </li>
+               </ul>
+             </nav>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6 mt-4">
+
+            <table>
+                <tr>
+                    <td>Name</td>  <td>{{ profile_details.name}}</td>
+                </tr>
+                 <tr>
+                    <td>Email</td>  <td>{{ profile_details.mailid}}</td>
+                </tr>
+                <tr>
+                    <td>Username</td>  <td>{{ profile_details.username}}</td>
+                </tr>
+                 <tr>
+                    <td>Stories</td>  <td>{{ profile_details.story_count}}</td>
+                </tr>
+            </table>
+
+            <img src="{{profile_details.profile_pic.url}}" width="120px" height="120px">
+
+           <form method="POST" action="{% url 'update_profile_pic' %}" enctype="multipart/form-data">
+               {% csrf_token %}
+
+        <div class="file btn btn-lg btn-primary">
+							Upload
+							<input type="file" name="pic"/>
+						</div>
+               <button type="submit">Change</button>
+           </form>
+
+
+
+        </div>
+        <div class="col-3"></div>
+    </div>
+
+
+</div>
+
+{% endblock %}

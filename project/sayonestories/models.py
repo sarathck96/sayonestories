@@ -12,7 +12,7 @@ class Sayoneuser(models.Model):
     username = models.CharField(max_length=70)
     password = models.CharField(max_length=30)
     cnf_pass = models.CharField(max_length=30)
-    profile_pic = models.ImageField(upload_to='images')
+    profile_pic = models.ImageField(upload_to='images',default='images/default_pic.jpg',null=True,blank=True)
     user = models.OneToOneField(User, related_name='sayone_user', on_delete=models.CASCADE)
 
 class Story(models.Model):

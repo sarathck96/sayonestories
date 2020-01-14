@@ -1,11 +1,11 @@
 {% extends 'base_layout.html'  %}
 {% load static %}
-
-
-
-
+{% block addcss %}
+<link rel="stylesheet" href="{% static 'css/heading.css' %}">
+{% endblock %}
 
 {% block content %}
+{% load widget_tweaks %}
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
@@ -30,23 +30,33 @@
     </div>
 
     <div class="row pt-5">
-        <div class="col-3"></div>
-        <div class="col-6 rounded-sm" >
+        <div class="col-4"></div>
+        <div class="col-4 rounded-sm border" >
 <form method="POST" >
    {% csrf_token %}
-     {% for field in form %}
-    <div class="form-group">
-        {{ field.errors }}
-        {{ field.label_tag }} {{ field }}
-
+   {% if form.errors %}
+    <div class="alert alert-danger">
+    <strong>Please Enter Correct Username and Password </strong>
+  </div>
+    {% endif %}
+ <div class="form-group">
+      <label class="loginfield">Username</label>
+      {{ form.username|add_class:"form-control" }}
     </div>
-{% endfor %}
-    <button type="submit">LOGIN</button>
+
+    <div class="form-group">
+<label class="loginfield" >Password</label>
+        {{ form.password|add_class:"form-control" }}
+    </div>
+    <button type="submit" class="btn btn-warning btn-block loginfield">LOGIN</button>
 </form>
 
+          <a href="{% url 'password_reset' %}">   <button class="btn btn-warning btn-block mt-4 loginfield">Forget password?</button></a>
+
+            <p class="mt-3">Don't have an account? <a href="{% url 'userregister' %}">SignUp</a> </p>
 
         </div>
-        <div class="col-3"></div>
+        <div class="col-4"></div>
     </div>
 </div>
 

@@ -1,13 +1,14 @@
+from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import RequestContext
 from django.views import View
-
+from django.core.mail import EmailMessage
 from .forms import UserRegistrationform, StoryAddForm, AddBlog, PhotoForm
 from django.forms import ValidationError, forms
 from django.contrib.auth.models import User
-from .models import Story, Blog, Images
+from .models import Story, Blog, Images ,Sayoneuser
 
 
 # Create your views here.
@@ -66,7 +67,7 @@ def validate_register(request):
     return render(request, 'sayonestories/userregistration.html', {'form': form})
 
 
-def User_profile_page(request):
+def User_home_page(request):
     pic_url = request.user.sayone_user.profile_pic
     story_object_for_user = Story.objects.filter(story_user=request.user)
 
@@ -181,5 +182,36 @@ def story_detail_page(request, id):
 
         for item in sub_story_object:
             print(item.file)
-        context1 = {'images': sub_story_object, 'substory': sub_story_object, 'story': story_obj,'dataslide':data_slide}
+        context1 = {'substory': sub_story_object, 'story': story_obj}
         return render(request, 'sayonestories/story_detail_page.html', context=context1)
+
+
+def delete_story(request,story_id):
+    item = Story.objects.get(story_id=story_id)
+    item.delete()
+    messages.success(request, ("Story has been deleted"))
+    return redirect(user_stories_page)
+
+
+def user_profile_page(request):
+    profile_details = {}
+    name = request.user.sayone_user.name
+    mailid = request.user.sayone_user.mailid
+    username = request.user.sayone_user.username
+    profile_pic = request.user.sayone_user.profile_pic
+
+    stories = Story.objects.filter(story_user=request.user)
+    story_count = stories.count()
+
+    profile_details = {'name':name,'mailid':mailid,'username':username,'profile_pic':profile_pic,'story_count':story_count}
+
+    print('kkk',profile_details)
+    return render(request,'sayonestories/UserProfile.html',context={'profile_details':profile_details})
+
+
+def update_profile_pic(request):
+    print('test',request.FILES['pic'])
+    obj = Sayoneuser.objects.get(user=request.user)
+    obj.profile_pic = request.FILES['pic']
+    obj.save()
+    return redirect(user_profile_page)

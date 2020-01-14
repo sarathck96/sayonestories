@@ -6,11 +6,13 @@
       {% load static %}
     <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-{% block addcss %}
+
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'css/myfonts.css' %}">
     <link rel="stylesheet" href="{% static 'css/loginpage.css' %}">
+  {% block addcss %}
+
      {% endblock %}
 
  

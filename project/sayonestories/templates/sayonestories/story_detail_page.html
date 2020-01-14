@@ -1,64 +1,106 @@
 {% extends 'base_layout.html' %}
 {% load static %}
+{% block addcss %}
+<link rel="stylesheet" href="{% static 'css/heading.css' %}">
+
+{% endblock %}
+
 {% block content %}
 
 <div class="container-fluid">
-    <div class="row">
-      <div class="col-12">
-        <h6>Title{{ story.story_title }}</h6><br>
-        <h6>Author{{story.story_author }}</h6><br>
-        <h6>published on {{story.date_created}}</h6><br>
+
+ <div class="row">
+   <div class="col-12">
+         <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+               <!-- Brand/logo -->
+               <a class="navbar-brand" href="#">
+                 <img src="{{img_url.url}}" alt="Sayone" class="rounded-circle" style="width:130px;height:100px;">
+                   {{user.sayone_user.name}}
+               </a>
 
 
-{% if blog %}
-<img src="{{picurl.url}}" width="300" height="300"><br>
-{{description}}
-{% endif %}
+               <!-- Links -->
+               <ul class="navbar-nav ml-auto">
+
+                 <li class="nav-item">
+                   <a class="nav-link lora" >My Profile </a>
+                 </li>
+                   <li class="nav-item">
+                   <a class="nav-link lora" href="{% url 'add_story_page' %}" >Add Story</a>
+                 </li>
+<li class="nav-item">
+                   <a class="nav-link lora" href="{% url 'logout' %}">Logout</a>
+                 </li>
+                    <li class="nav-item ">
+                   <a class="nav-link lora" href="{% url 'user_stories_page' %}">My Stories</a>
+                 </li>
+               </ul>
+             </nav>
+
+
+   </div>
+ </div>
+
+
+
+ <div class="row">
+   <div class="col-3"></div>
+   <div class="col-6 pt-5">
+
+     <div class="card">
+ <div class="card-body heading2 bg-warning">{{ story.story_title}}</div>
 </div>
-</div>
+     <div class="card pt-4">
+         {% if blog %}
+   <img src="{{picurl.url}}" width="100%" height="400px">
+        {% endif %}
 
-<div class="row">
-  <div class="col-2"></div>
-  <div class="col-8">
-{% if images %}
-<div class="w3-content w3-display-container">
-  {% for image in substory %}
-  <img class="mySlides" src="{{image.file.url}}" style="width:100%;height:400px;">
-  {% endfor %}
-  
+         {% if substory %}
+
+         <div class="w3-content w3-display-container">
+             {% for item in substory %}
+  <img class="mySlides" src="{{ item.file.url }}" style="width:100%" height="400px">
+{% endfor %}
 
   <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
   <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
 </div>
-{% endif %}
+         {% endif %}
+
+   </div>
+     <div class="card pt-2">
+       <h3>{{story.story_author}}</h3>
+       <h3>{{story.date_created}}</h3>
+
+     </div>
+
+     <div class="card p-2 mt-2 content">
+       {{description}}
+     </div>
+   <div class="col-3"></div>
+
+ </div>
+
+
 </div>
-<div class="col-2"></div>
-</div>
-<script>
-  var slideIndex = 1;
-  showDivs(slideIndex);
-  
-  function plusDivs(n) {
-    showDivs(slideIndex += n);
+
+    <script>
+var slideIndex = 1;
+showDivs(slideIndex);
+
+function plusDivs(n) {
+  showDivs(slideIndex += n);
+}
+
+function showDivs(n) {
+  var i;
+  var x = document.getElementsByClassName("mySlides");
+  if (n > x.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = x.length}
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
   }
-  
-  function showDivs(n) {
-    var i;
-    var x = document.getElementsByClassName("mySlides");
-    if (n > x.length) {slideIndex = 1}
-    if (n < 1) {slideIndex = x.length}
-    for (i = 0; i < x.length; i++) {
-      x[i].style.display = "none";  
-    }
-    x[slideIndex-1].style.display = "block";  
-  }
-  </script>
-
-
-
-
-
-</div>
+  x[slideIndex-1].style.display = "block";
+}
+</script>
 {% endblock %}
-
-  

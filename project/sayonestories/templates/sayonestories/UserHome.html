@@ -2,52 +2,72 @@
 {% extends 'base_layout.html' %}
 {% load static %}
 
+{% block addcss %}
+<link rel="stylesheet" href="{% static 'css/heading.css' %}">
 
+{% endblock %}
 
 {% block content %}
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-                <!-- Brand/logo -->
-                <a class="navbar-brand" href="#">
-                  <img src="{{img_url.url}}" alt="Sayone" class="rounded-circle" style="width:130px;height:100px;">
-                    {{user.sayone_user.name}}
-                </a>
+   <div class="row">
+       <div class="col-12">
+           <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+               <!-- Brand/logo -->
+               <a class="navbar-brand" href="#">
+                 <img src="{{img_url.url}}" alt="Sayone" class="rounded-circle" style="width:130px;height:100px;">
+                   {{user.sayone_user.name}}
+               </a>
 
 
-                <!-- Links -->
-                <ul class="navbar-nav ml-auto">
+               <!-- Links -->
+               <ul class="navbar-nav ml-auto">
 
-                  <li class="nav-item">
-                    <a class="nav-link lora" >My Profile </a>
-                  </li>
-                    <li class="nav-item">
-                    <a class="nav-link lora" href="{% url 'add_story_page' %}" >Add Story</a>
-                  </li>
- <li class="nav-item">
-                    <a class="nav-link lora" href="{% url 'logout' %}">Logout</a>
-                  </li>
-                     <li class="nav-item ">
-                    <a class="nav-link lora" href="{% url 'user_stories_page' %}">My Stories</a>
-                  </li>
-                </ul>
-              </nav>
+                 <li class="nav-item">
+                   <a class="nav-link lora" href="{% url 'user_profile_page' %}" >My Profile </a>
+                 </li>
+                   <li class="nav-item">
+                   <a class="nav-link lora" href="{% url 'add_story_page' %}" >Add Story</a>
+                 </li>
+<li class="nav-item">
+                   <a class="nav-link lora" href="{% url 'logout' %}">Logout</a>
+                 </li>
+                    <li class="nav-item ">
+                   <a class="nav-link lora" href="{% url 'user_stories_page' %}">My Stories</a>
+                 </li>
+               </ul>
+             </nav>
 
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            {% for story in stories %}
-            <div class="card">
-                <div class="card-body"><a href="{% url 'story_detail_page' story.story_id%}"><h4 >{{story.story_title}}</h4></a>
-                    <h4 >{{story.story_author}}</h4><br>
-                    <h4 >{{story.date_created}}</h4>
-                </div>
+       </div>
+   </div>
+   <div class="row pt-4">
+       <div class="col-3"></div>
+       <div class="col-6">
+           {% for story in stories %}
+           <div class="card mt-2">
+               <div class="card-body pb-3">
+                   <table ><tr ><a href="{% url 'story_detail_page' story.story_id%}">{{story.story_title}}</a></tr>
+                       <tr><td>Author</td>
+                           <td>{{story.story_author}}</td></tr>
+                       <tr><td>Created on</td><td>{{story.date_created}}</td></tr>
+                       <tr><td>Story Type</td>
+                       <td>
+                           {% if story.story_type == 0 %}
+                           <span class="badge badge-success">Event</span>
+                           {% elif story.story_type == 1 %}
+                           <span class="badge badge-danger">Blog</span>
+                           {% elif story.story_type == 2 %}
+                           <span class="badge badge-warning">Image Gallery</span>
+                           {% endif %}
+                       </td>
+
+                       </tr>
+                   </table>
+               </div>
 </div>
-            {% endfor %}
-        </div>
-    </div>
+           {% endfor %}
+       </div>
+       <div class="col-3"></div>
+   </div>
 </div>
 
 
