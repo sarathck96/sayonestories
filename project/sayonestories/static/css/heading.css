@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css?family=Crimson+Text:400,600&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Trocchi|Vesper+Libre:400,700&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Ibarra+Real+Nova&display=swap');
-
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Neuton:400,800&display=swap');
 a {
  font-family: 'Gelasio', serif;font-size:22px;color:black;
@@ -17,3 +17,5 @@ td { font-family: 'Crimson Text', serif;font-weight:600;font-size:18px;padding:5
 .loginfield {font-family: 'Neuton', serif;font-weight:400;font-size:18px; }
 
 .content {font-family: 'Ibarra Real Nova', serif;font-weight:400;font-size:18px;}
+
+.robotomono {font-family: 'Roboto Mono', monospace;font-weight:400;font-size:18px;}

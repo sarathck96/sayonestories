@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
+from django.db.models import F
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import RequestContext
@@ -8,8 +9,8 @@ from django.core.mail import EmailMessage
 from .forms import UserRegistrationform, StoryAddForm, AddBlog, PhotoForm
 from django.forms import ValidationError, forms
 from django.contrib.auth.models import User
-from .models import Story, Blog, Images ,Sayoneuser
-
+from .models import Story, Blog, Images ,Sayoneuser,Like
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -163,12 +164,18 @@ def user_stories_page(request):
 def story_detail_page(request, id):
     story_obj = Story.objects.filter(story_id=id)[0]
 
+    already_liked = ''
+    if Like.objects.filter(user_liked=request.user).filter(story_liked=story_obj):
+        already_liked = 'yes'
+    else:
+        already_liked = 'no'
+
     if story_obj.story_type in [0, 1]:
         for item in story_obj.blog_story.all():
             pic_url = item.blog_pic
             blog_description = item.blog_description
 
-        context = {'blog': 'blog', 'picurl': pic_url, 'description': blog_description, 'story': story_obj}
+        context = {'blog': 'blog', 'picurl': pic_url, 'description': blog_description, 'story': story_obj,'liked':already_liked}
         return render(request, 'sayonestories/story_detail_page.html', context)
     else:
         sub_story_object = story_obj.image_story.all()
@@ -182,7 +189,7 @@ def story_detail_page(request, id):
 
         for item in sub_story_object:
             print(item.file)
-        context1 = {'substory': sub_story_object, 'story': story_obj}
+        context1 = {'substory': sub_story_object, 'story': story_obj,'liked':already_liked}
         return render(request, 'sayonestories/story_detail_page.html', context=context1)
 
 
@@ -215,3 +222,24 @@ def update_profile_pic(request):
     obj.profile_pic = request.FILES['pic']
     obj.save()
     return redirect(user_profile_page)
+
+def like_story(request,story_id):
+
+    story = Story.objects.get(story_id=story_id)
+    can_like = ''
+    if Like.objects.filter(user_liked=request.user).filter(story_liked=story):
+        can_like = 'no'
+    else:
+        Story.objects.filter(story_id=story_id).update(story_likes=F('story_likes') + 1)
+        like = Like.objects.create(user_liked = request.user,story_liked=story)
+        can_like = 'yes'
+
+    data = {'is_valid':can_like}
+    return JsonResponse(data)
+
+    
+
+
+
+
+

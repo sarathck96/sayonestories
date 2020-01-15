@@ -24,6 +24,7 @@ class Story(models.Model):
     story_id = models.AutoField(primary_key=True)
     story_author = models.CharField(max_length=50)
     story_title = models.CharField(max_length=50)
+    story_likes = models.IntegerField(default=0)
     story_type = models.IntegerField(choices=story_type_choices,default=0)
     date_created = models.DateTimeField(auto_now_add=True)
     story_user = models.ForeignKey(User,related_name='story_user',on_delete=models.CASCADE)
@@ -37,4 +38,12 @@ class Blog(models.Model):
 class Images(models.Model):
     file = models.ImageField(upload_to='images')
     story = models.ForeignKey(Story,on_delete=models.CASCADE, related_name='image_story')
+
+class Like(models.Model):
+
+    user_liked = models.ForeignKey(User,on_delete=models.CASCADE)
+    story_liked = models.ForeignKey(Story,on_delete=models.CASCADE)
+
+
+
 

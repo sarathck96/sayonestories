@@ -20,6 +20,7 @@ urlpatterns = [
     path('delete_story/<int:story_id>/',views.delete_story,name='delete_story'),
     path('userprofilepage',views.user_profile_page,name='user_profile_page'),
     path('updateprofilepic',views.update_profile_pic, name='update_profile_pic'),
+    path('like_story/<int:story_id>/',views.like_story, name='like_story'),
 
 
 

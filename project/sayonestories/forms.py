@@ -31,7 +31,7 @@ class UserRegistrationform(forms.ModelForm):
 class StoryAddForm(forms.ModelForm):
     class Meta:
         model = Story
-        exclude = ('story_user','story_author',)
+        exclude = ('story_user','story_author','story_likes')
 
 
 class AddBlog(forms.ModelForm):

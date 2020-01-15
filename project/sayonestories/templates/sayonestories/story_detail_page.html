@@ -5,6 +5,12 @@
 
 {% endblock %}
 
+
+
+
+
+
+
 {% block content %}
 
 <div class="container-fluid">
@@ -44,7 +50,9 @@
 
 
  <div class="row">
-   <div class="col-3"></div>
+   <div class="col-3 ">
+
+   </div>
    <div class="col-6 pt-5">
 
      <div class="card">
@@ -74,15 +82,25 @@
 
      </div>
 
-     <div class="card p-2 mt-2 content">
+     <div class="card p-2 mt-2 robotomono">
        {{description}}
      </div>
-   <div class="col-3"></div>
+
 
  </div>
 
+       <div class="col-3 my-auto">
+            {% if liked == 'no' %}
+       <img src="{% static 'images/love1.jpg' %}" width="50px" height="50px" id="like">
+       {% else %}
+       <img src="{% static 'images/love2.jpg' %}" width="50px" height="50px" id="like" >
+       {% endif %}
+           <div id="counter"><b>{{story.story_likes}}</b></div>
+
+   </div>
 
 </div>
+
 
     <script>
 var slideIndex = 1;
@@ -102,5 +120,30 @@ function showDivs(n) {
   }
   x[slideIndex-1].style.display = "block";
 }
+</script>
+<script>
+var like = "{% static 'images/love2.jpg' %}"
+    $(document).ready(function(){
+  $("#like").click(function(){
+
+$.ajax({
+        url: "{% url 'like_story' story.story_id %}",
+
+        dataType: 'json',
+        success: function (data) {
+          if (data.is_valid == 'yes' ) {
+              $('#counter').html(function(i, val) { return +val+1 });
+              $("#like").attr("src",like);
+          }
+          else {
+          alert('you have already liked this pic');
+          }
+        }
+      });
+
+
+
+  });
+});
 </script>
 {% endblock %}
