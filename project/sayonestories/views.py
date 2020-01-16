@@ -11,7 +11,7 @@ from django.views.generic.edit import FormView
 from .forms import UserRegistrationform, StoryAddForm, AddBlog, PhotoForm,MultiUploadForm
 from django.forms import ValidationError, forms
 from django.contrib.auth.models import User
-from .models import Story, Blog, Images ,Sayoneuser,Like ,multipics
+from .models import Story, Blog, Images ,Sayoneuser,Like
 from django.http import JsonResponse
 
 # Create your views here.
@@ -110,7 +110,8 @@ def add_sub_story(request):
         form1 = AddBlog()
         return render(request, 'sayonestories/addstory.html', context={'story': story_object, 'form1': form1})
     else:
-        return render(request, 'sayonestories/addstory.html', context={'story': story_object, 'form2': 'picgallery'})
+        form2 = MultiUploadForm()
+        return render(request, 'sayonestories/addstory.html', context={'story': story_object, 'form2': form2})
 
 
 def add_blog(request):
@@ -181,6 +182,7 @@ def story_detail_page(request, id):
         return render(request, 'sayonestories/story_detail_page.html', context)
     else:
         sub_story_object = story_obj.image_story.all()
+        print(sub_story_object)
 
         count = story_obj.image_story.count()
 
@@ -240,25 +242,23 @@ def like_story(request,story_id):
     return JsonResponse(data)
 
 
-def testupload(request):
-    form = MultiUploadForm()
-    return render(request,'sayonestories/test.html',context={'form':form})
 
-def testvalidate(request):
-    print('here')
-    mult = multipics.objects.all()
-    print(mult)
 
+def add_multiple_pics(request,story_id):
+    story_id = story_id
+    story_obj = Story.objects.filter(story_id=story_id)
     if request.method == 'POST':
-        print('kkk')
+
         form = MultiUploadForm(request.POST,request.FILES)
         if form.is_valid():
-            for each in form.cleaned_data['pics']:
-                multipics.objects.create(pics=each,text='testing')
+            for each in form.cleaned_data['file']:
+                print('lll',each)
+                Images.objects.create(file=each,story=story_obj[0])
 
-        return redirect('test_upload')
+        return redirect('user_home_page')
     else :
-        return render(request,'sayonestories/test.html',context={})
+        form = MultiUploadForm()
+        return render(request,'sayonestories/addstory.html',context={'form2':form})
 
 
 

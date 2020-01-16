@@ -22,8 +22,8 @@ urlpatterns = [
     path('updateprofilepic',views.update_profile_pic, name='update_profile_pic'),
     path('like_story/<int:story_id>/',views.like_story, name='like_story'),
 
-    path('test',views.testupload,name='test_upload'),
-    path('testvalidate' ,views.testvalidate,name='test_validate'),
+
+    path('multiple_pic_upload/<int:story_id>/' ,views.add_multiple_pics,name='multiple_pic_upload'),
 
 
 

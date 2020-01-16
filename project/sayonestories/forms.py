@@ -1,7 +1,7 @@
 from django import forms
 from django.core.validators import MinLengthValidator
 
-from .models import Sayoneuser, Story, Blog, Images,multipics
+from .models import Sayoneuser, Story, Blog, Images
 from django.core import validators
 from django.contrib.auth.models import User
 from multiupload.fields import MultiFileField
@@ -67,15 +67,10 @@ class PhotoForm(forms.ModelForm):
 
 class MultiUploadForm(forms.ModelForm):
 
-    pics = MultiFileField(min_num=1, max_num=3, max_file_size=1024 * 1024 * 5)
+    file = MultiFileField(min_num=1, max_num=4, max_file_size=1024 * 1024 * 5)
 
     class Meta:
-        fields = '__all__'
-        model = multipics
+        exclude = ('story',)
+        model = Images
 
 
-
-        labels = {
-            'pics':'uploadpics',
-            'text':'Desc',
-        }
