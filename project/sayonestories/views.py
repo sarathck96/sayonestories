@@ -17,15 +17,23 @@ from django.http import JsonResponse
 # Create your views here.
 
 def home(request):
+
+    # Loads the home page of the application sayone stories
     return render(request, 'sayonestories/home.html', context={})
 
 
 def userregisterform(request):
+
+    # loads the form for the user to register by entering details
     form = UserRegistrationform()
     return render(request, 'sayonestories/userregistration.html', context={'form': form})
 
 
 def validate_register(request):
+
+    """ this view validates the fields of the userregistration form and informs the user whether he/she have missed
+    to enter data in a field or the data entered in the field is wrong. if all data entered is correct performs user
+    registration  """
     if request.method == 'POST':
         form = UserRegistrationform(request.POST, request.FILES)
         if form.is_valid():
@@ -71,6 +79,9 @@ def validate_register(request):
 
 
 def User_home_page(request):
+
+     """loads the  Home page for specific user"""
+
     pic_url = request.user.sayone_user.profile_pic
     story_object_for_user = Story.objects.filter(story_user=request.user)
 
@@ -80,12 +91,17 @@ def User_home_page(request):
 
 
 def add_story_page(request):
+
+    """loads the page containing form to add story """
+
     form = StoryAddForm()
 
     return render(request, 'sayonestories/addstory.html', context={'form': form})
 
 
 def add_story(request):
+
+    """ adds the story enterd by the user to the database """
     if request.method == 'POST':
         form = StoryAddForm(request.POST)
         if form.is_valid():
@@ -104,6 +120,10 @@ def add_story(request):
 
 
 def add_sub_story(request):
+
+    """ substory is the story type (it could be Event,Blog,image gallery) . user is shown different forms depending on
+     the story type . this view adds the substory to the database """
+
     story_object = Story.objects.latest('story_id')
 
     if story_object.story_type in [0, 1]:
@@ -115,6 +135,8 @@ def add_sub_story(request):
 
 
 def add_blog(request):
+
+    """ if the story type is blog or event then this view adds the blog/event to the database """
     print('call here')
     story_id = request.POST.get('storyid')
     story_obj = Story.objects.filter(story_id=story_id)
@@ -133,18 +155,7 @@ def add_blog(request):
         return render(request, 'sayonestories/addstory.html', context={})
 
 
-def basicupload(request, id):
-    story_id = id
-    story_obj = Story.objects.filter(story_id=story_id)
-    form = PhotoForm(request.POST, request.FILES)
-    if form.is_valid():
-        photo = form.save(commit=False)
-        photo.story = story_obj[0]
-        photo.save()
-        data = {'is_valid': True, 'name': photo.file.name, 'url': photo.file.url}
-    else:
-        data = {'is_valid': False}
-    return JsonResponse(data)
+
 
 
 def uploadpic(request):
@@ -160,11 +171,18 @@ def clear_database(request):
 
 
 def user_stories_page(request):
+
+    # loads the page containing all stories added by the specific user
     story_objects_for_user = Story.objects.filter(story_user=request.user)
     return render(request, 'sayonestories/userstories_page.html', context={'stories': story_objects_for_user})
 
 
 def story_detail_page(request, id):
+
+    """loads all the details regarding the selected story .details include story title,author,date created and
+    substory details .if substory is blog or event the details include title,image and description .if substory is
+    image gallery details include title and images """
+
     story_obj = Story.objects.filter(story_id=id)[0]
 
     already_liked = ''
@@ -198,6 +216,8 @@ def story_detail_page(request, id):
 
 
 def delete_story(request,story_id):
+
+    """ deletes the selected story and generate alert box to tell user that story has been deleted """
     item = Story.objects.get(story_id=story_id)
     item.delete()
     messages.success(request, ("Story has been deleted"))
@@ -205,6 +225,10 @@ def delete_story(request,story_id):
 
 
 def user_profile_page(request):
+
+    """ shows the details of the user's profile .details include name,username,email ,profile pic and number of
+    stories added by user. """
+
     profile_details = {}
     name = request.user.sayone_user.name
     mailid = request.user.sayone_user.mailid
@@ -221,6 +245,9 @@ def user_profile_page(request):
 
 
 def update_profile_pic(request):
+
+    """ allows the user to update the profile picture """
+
     print('test',request.FILES['pic'])
     obj = Sayoneuser.objects.get(user=request.user)
     obj.profile_pic = request.FILES['pic']
@@ -228,6 +255,10 @@ def update_profile_pic(request):
     return redirect(user_profile_page)
 
 def like_story(request,story_id):
+
+    """ allows the user to like a story .checks whether the user have already liked the story .if already liked alerts
+     the user that story is liked ,else increments the like count by one. story_id is unique id of story used to check
+     whether user have already liked the story """
 
     story = Story.objects.get(story_id=story_id)
     can_like = ''
@@ -245,6 +276,10 @@ def like_story(request,story_id):
 
 
 def add_multiple_pics(request,story_id):
+
+    """ This view helps the user to load image gallery as part of his/her story . story_id is the unique id of the story
+    that has been passed . story_id is used to fetch story object and map story and images in the database """
+
     story_id = story_id
     story_obj = Story.objects.filter(story_id=story_id)
     if request.method == 'POST':

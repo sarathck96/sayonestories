@@ -12,7 +12,6 @@ urlpatterns = [
     path('substory',views.add_sub_story,name='add_sub_story'),
     path('addstory',views.add_story,name='add_story'),
     path('addblog',views.add_blog, name='add_blog'),
-    path('basicupload/<int:id>/',views.basicupload,name='basic_upload'),
     path('upload',views.uploadpic,name='upload_page'),
     path('clear',views.clear_database,name='clear_images'),
     path('userstorypage',views.user_stories_page,name='user_stories_page'),
