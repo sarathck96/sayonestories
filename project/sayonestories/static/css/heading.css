@@ -18,4 +18,6 @@ td { font-family: 'Crimson Text', serif;font-weight:600;font-size:18px;padding:5
 
 .content {font-family: 'Ibarra Real Nova', serif;font-weight:400;font-size:18px;}
 
-.robotomono {font-family: 'Roboto Mono', monospace;font-weight:400;font-size:18px;}
+.robotomono {font-family: 'Roboto Mono', monospace;font-weight:400;font-size:15px;}
+
+ .crimson {font-family: 'Crimson Text', serif;font-weight:600;font-size:18px}

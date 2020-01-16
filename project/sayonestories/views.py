@@ -6,10 +6,12 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import RequestContext
 from django.views import View
 from django.core.mail import EmailMessage
-from .forms import UserRegistrationform, StoryAddForm, AddBlog, PhotoForm
+from django.views.generic.edit import FormView
+
+from .forms import UserRegistrationform, StoryAddForm, AddBlog, PhotoForm,MultiUploadForm
 from django.forms import ValidationError, forms
 from django.contrib.auth.models import User
-from .models import Story, Blog, Images ,Sayoneuser,Like
+from .models import Story, Blog, Images ,Sayoneuser,Like ,multipics
 from django.http import JsonResponse
 
 # Create your views here.
@@ -123,7 +125,7 @@ def add_blog(request):
             blog = form.save(commit=False)
             blog.story = story_obj[0]
             blog.save()
-            return render(request, 'sayonestories/Loginpage.html', context={})
+            return redirect('user_home_page')
         else:
             return render(request, 'sayonestories/addstory.html', context={})
     else:
@@ -237,8 +239,26 @@ def like_story(request,story_id):
     data = {'is_valid':can_like}
     return JsonResponse(data)
 
-    
 
+def testupload(request):
+    form = MultiUploadForm()
+    return render(request,'sayonestories/test.html',context={'form':form})
+
+def testvalidate(request):
+    print('here')
+    mult = multipics.objects.all()
+    print(mult)
+
+    if request.method == 'POST':
+        print('kkk')
+        form = MultiUploadForm(request.POST,request.FILES)
+        if form.is_valid():
+            for each in form.cleaned_data['pics']:
+                multipics.objects.create(pics=each,text='testing')
+
+        return redirect('test_upload')
+    else :
+        return render(request,'sayonestories/test.html',context={})
 
 
 

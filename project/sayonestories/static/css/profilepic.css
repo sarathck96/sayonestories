@@ -1,3 +1,13 @@
+@import url('https://fonts.googleapis.com/css?family=Gelasio&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Crimson+Text:400,600&display=swap');
+
+a {
+ font-family: 'Gelasio', serif;font-size:22px;color:black;
+}
+
+
+td {font-family: 'Crimson Text', serif;font-weight:600;font-size:18px}
+
 div {
   position: relative;
   overflow: hidden;
@@ -9,3 +19,4 @@ input {
   right: 0;
   top: 0;
 }
+

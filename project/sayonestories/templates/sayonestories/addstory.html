@@ -1,6 +1,11 @@
 
 {% extends 'base_layout.html' %}
 {% load static %}
+{% block addcss %}
+
+<link rel="stylesheet" href="{% static 'css/heading.css' %}">
+
+{% endblock %}
 
 {% block content %}
 <div class="container-fluid">
@@ -25,21 +30,25 @@
                   </li>
                 </ul>
               </nav>
+        </div>
+
+        <div class="col-3"></div>
+        <div class="col-6 crimson mt-4">
             {% if story %}
             story title :{{story.story_title }}<br>
             story type :{% if story.story_type == 0 %} Event
                         {% elif story.story_type == 1 %}Blog
                         {% elif story.story_type == 2 %} Pic Gallery
                         {% endif %} <br>
-            Date created {{ story.date_created }}
+            Date created {{ story.date_created }}<br>
             Author {{story.story_author }}
 
             {% endif %}
             {% if form %}
-            <form method="POST" action="{% url 'add_story' %}" >
+            <form method="POST" action="{% url 'add_story' %}" class="crimson">
                 {% csrf_token %}
             {{form}}
-                <button type="submit">Add</button>
+                <button type="submit" class="btn btn-warning mt-4 ">Add</button>
             </form>
             {% endif %}
 
@@ -51,7 +60,7 @@
                 <input type="hidden" value="{{story.story_id}}" name="storyid">
                 {% endif %}
             {{form1}}
-                <button type="submit">Add</button>
+                <button type="submit" class="btn btn-warning mt-4 ">Add</button>
             </form>
             {% endif %}
 
@@ -79,10 +88,12 @@
   </tbody>
 </table>
 
+
             {% endif %}
         </div>
-    </div>
-</div>
+
+        <div class="col-3"></div>
+        </div>
 
 
 

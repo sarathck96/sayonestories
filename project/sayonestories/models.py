@@ -3,8 +3,7 @@ from django.contrib.auth.models import User
 from django.core import validators
 from django.core.validators import MinLengthValidator
 from django.core.exceptions import ValidationError
-
-
+from django.urls import reverse
 
 class Sayoneuser(models.Model):
     name = models.CharField(max_length=70, validators=[MinLengthValidator(5)])
@@ -43,6 +42,8 @@ class Like(models.Model):
 
     user_liked = models.ForeignKey(User,on_delete=models.CASCADE)
     story_liked = models.ForeignKey(Story,on_delete=models.CASCADE)
+
+
 
 
 

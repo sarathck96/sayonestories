@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
 
+
 ]
 
 MIDDLEWARE = [
@@ -132,3 +133,5 @@ EMAIL_HOST_USER = 'testusersayone@gmail.com'
 EMAIL_HOST_PASSWORD = 'S@yone2020'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
+
+

@@ -29,7 +29,7 @@
                <ul class="navbar-nav ml-auto">
 
                  <li class="nav-item">
-                   <a class="nav-link lora" >My Profile </a>
+                   <a class="nav-link lora" href="{% url 'user_profile_page' %}">My Profile </a>
                  </li>
                    <li class="nav-item">
                    <a class="nav-link lora" href="{% url 'add_story_page' %}" >Add Story</a>
@@ -76,13 +76,13 @@
          {% endif %}
 
    </div>
-     <div class="card pt-2">
-       <h3>{{story.story_author}}</h3>
-       <h3>{{story.date_created}}</h3>
+     <div class="card pt-2 ">
+       <h3 class="robotomono">{{story.story_author}}</h3>
+       <h3 class="robotomono">{{story.date_created}}</h3>
 
      </div>
 
-     <div class="card p-2 mt-2 robotomono">
+     <div class="card p-2 mt-2 crimson">
        {{description}}
      </div>
 
@@ -90,14 +90,18 @@
  </div>
 
        <div class="col-3 my-auto">
+           <div id="counter" style="position:relative;"><b>{{story.story_likes}}</b></div>
             {% if liked == 'no' %}
+           <div>
        <img src="{% static 'images/love1.jpg' %}" width="50px" height="50px" id="like">
        {% else %}
        <img src="{% static 'images/love2.jpg' %}" width="50px" height="50px" id="like" >
        {% endif %}
-           <div id="counter"><b>{{story.story_likes}}</b></div>
+           </div> <br>
+
 
    </div>
+
 
 </div>
 
@@ -133,6 +137,7 @@ $.ajax({
         success: function (data) {
           if (data.is_valid == 'yes' ) {
               $('#counter').html(function(i, val) { return +val+1 });
+              console.log($('#counter').val());
               $("#like").attr("src",like);
           }
           else {
