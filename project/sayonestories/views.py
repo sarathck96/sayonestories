@@ -80,7 +80,7 @@ def validate_register(request):
 
 def User_home_page(request):
 
-     """loads the  Home page for specific user"""
+    """loads the  Home page for specific user"""
 
     pic_url = request.user.sayone_user.profile_pic
     story_object_for_user = Story.objects.filter(story_user=request.user)

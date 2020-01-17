@@ -4,8 +4,15 @@
 @import url('https://fonts.googleapis.com/css?family=Ibarra+Real+Nova&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Neuton:400,800&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
+
 a {
  font-family: 'Gelasio', serif;font-size:22px;color:black;
+}
+
+.hh {
+    font-size: 15px;
 }
 
 td { font-family: 'Crimson Text', serif;font-weight:600;font-size:18px;padding:5px;}
@@ -21,3 +28,7 @@ td { font-family: 'Crimson Text', serif;font-weight:600;font-size:18px;padding:5
 .robotomono {font-family: 'Roboto Mono', monospace;font-weight:400;font-size:15px;}
 
  .crimson {font-family: 'Crimson Text', serif;font-weight:600;font-size:18px}
+
+ .roboto { font-family: 'Roboto', sans-serif;font-size: 15px;}
+
+ .quicksand {font-family: 'Quicksand', sans-serif;font-weight:400;font-size: 18px;}

@@ -2,13 +2,9 @@
 {% load static %}
 {% block addcss %}
 <link rel="stylesheet" href="{% static 'css/heading.css' %}">
+<link rel="stylesheet" href="{% static 'css/heading2.css' %}">
 
 {% endblock %}
-
-
-
-
-
 
 
 {% block content %}
@@ -76,9 +72,10 @@
          {% endif %}
 
    </div>
-     <div class="card pt-2 ">
-       <h3 class="robotomono">{{story.story_author}}</h3>
-       <h3 class="robotomono">{{story.date_created}}</h3>
+     <div class="card pt-2 text-right">
+       <h3 class="dancingscript">{{story.story_author}}</h3>
+       <h3 class="dancingscript">{{story.date_created}}</h3>
+
 
      </div>
 
@@ -89,15 +86,20 @@
 
  </div>
 
+
        <div class="col-3 my-auto">
-           <div id="counter" style="position:relative;"><b>{{story.story_likes}}</b></div>
+
+            <div>
             {% if liked == 'no' %}
-           <div>
+
        <img src="{% static 'images/love1.jpg' %}" width="50px" height="50px" id="like">
        {% else %}
-       <img src="{% static 'images/love2.jpg' %}" width="50px" height="50px" id="like" >
+       <img src="{% static 'images/love3.png' %}" width="50px" height="50px" id="like" >
        {% endif %}
+                <div id="counter" ><b>{{story.story_likes}}</b></div>
            </div> <br>
+
+
 
 
    </div>
@@ -126,7 +128,8 @@ function showDivs(n) {
 }
 </script>
 <script>
-var like = "{% static 'images/love2.jpg' %}"
+var like = "{% static 'images/love3.png' %}"
+var counter = {{ story.story_likes }}
     $(document).ready(function(){
   $("#like").click(function(){
 
@@ -136,9 +139,12 @@ $.ajax({
         dataType: 'json',
         success: function (data) {
           if (data.is_valid == 'yes' ) {
-              $('#counter').html(function(i, val) { return +val+1 });
-              console.log($('#counter').val());
+
+               counter++;
+               $('#counter').text(counter);
               $("#like").attr("src",like);
+
+
           }
           else {
           alert('you have already liked this pic');

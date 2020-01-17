@@ -4,32 +4,33 @@
 <link rel="stylesheet" href="{% static 'css/heading.css' %}">
 {% endblock %}
 {% block content %}
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-                <!-- Brand/logo -->
-                <a class="navbar-brand" href="#">
-                    <img src="{% static 'images/images.png' %}" alt="Sayone" style="width:70px;height:50px;">
-                </a>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <!-- Brand/logo -->
+    <a class="navbar-brand" href="#">
+        <img src="{% static 'images/images.png' %}" alt="Sayone" style="width:70px;height:50px;" class="rounded-sm">
+    </a>
 
-                <!-- Links -->
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link " href="{% url 'login' %}">SIGN IN</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="{% url 'userregister' %}">REGISTER</a>
-                    </li>
+    <!-- Links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link quicksand" href="{% url 'login' %}">Sign In</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link quicksand" href="{% url 'userregister' %}">Register</a>
+        </li>
 
-                </ul>
-            </nav>
-        </div>
-    </div>
+    </ul>
+</nav>
+<div class="container">
+    
+        
+            
+        
+    
     <div class="row">
-        <div class="col-12">
-            <center><b>Welcome to Sayone Stories . Start Sharing </b></center>
-            <br>
+        <div class="col-12 my-5 text-center">
+        <h2>Welcome to Sayone Stories . Start Sharing</h2>
+            
         </div>
     </div>
     <div class="row">
@@ -77,5 +78,13 @@
         </div>
     </div>
 
+    
+
 </div>
+
+<footer class="footer bg-dark py-4">
+    <div class="container">
+      <span class="text-muted">© SayOne Technologies 2020</span>
+    </div>
+  </footer>
 {% endblock %}
