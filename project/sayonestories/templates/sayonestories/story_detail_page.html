@@ -72,17 +72,31 @@
          {% endif %}
 
    </div>
-     <div class="card pt-2 text-right">
+     <div class="pt-2 text-right">
        <h3 class="dancingscript">{{story.story_author}}</h3>
        <h3 class="dancingscript">{{story.date_created}}</h3>
 
 
      </div>
 
-     <div class="card p-2 mt-2 crimson">
+     <div class="p-2 mt-2 crimson">
        {{description}}
      </div>
 
+     {% for comment in comments %}
+     <div class="cantarell py-2">
+     {{ comment.comment }}
+     {{ comment.user_commented.sayone_user.name}}
+</div>
+     {% endfor %}
+
+     <div >
+       <form method="POST" action="{% url 'add_comment' story.story_id %}">
+         {% csrf_token %}
+         {{ form }}
+         <button type="submit" class="btn btn-sm btn-warning">Add comment</button>
+       </form>
+     </div>
 
  </div>
 

@@ -1,7 +1,7 @@
 from django import forms
 from django.core.validators import MinLengthValidator
 
-from .models import Sayoneuser, Story, Blog, Images
+from .models import Sayoneuser, Story, Blog, Images ,Comments
 from django.core import validators
 from django.contrib.auth.models import User
 from multiupload.fields import MultiFileField
@@ -36,11 +36,13 @@ class StoryAddForm(forms.ModelForm):
         widgets = {
             'story_title':forms.TextInput(attrs={'class':'form-control'}),
             'story_type':forms.Select(attrs={'class':'form-control'}),
+            'story_status':forms.Select(attrs={'class':'form-control'}),
         }
 
         labels = {
             'story_title': 'Story Title',
             'story_type': 'Story Type',
+            'story_status':'Story Status',
 
         }
 
@@ -73,4 +75,13 @@ class MultiUploadForm(forms.ModelForm):
         exclude = ('story',)
         model = Images
 
+class AddCommentForm(forms.ModelForm):
 
+   class Meta:
+       model = Comments
+       exclude = ('user_commented','story_commented',)
+
+       widgets = {
+           'comment': forms.TextInput(attrs={'class':'form-control'})
+
+       }

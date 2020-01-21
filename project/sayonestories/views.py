@@ -8,29 +8,28 @@ from django.views import View
 from django.core.mail import EmailMessage
 from django.views.generic.edit import FormView
 
-from .forms import UserRegistrationform, StoryAddForm, AddBlog, PhotoForm,MultiUploadForm
+from .forms import UserRegistrationform, StoryAddForm, AddBlog, PhotoForm, MultiUploadForm, AddCommentForm
 from django.forms import ValidationError, forms
 from django.contrib.auth.models import User
-from .models import Story, Blog, Images ,Sayoneuser,Like
+from .models import Story, Blog, Images, Sayoneuser, Like, Comments
 from django.http import JsonResponse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 
 # Create your views here.
 
 def home(request):
-
     # Loads the home page of the application sayone stories
     return render(request, 'sayonestories/home.html', context={})
 
 
 def userregisterform(request):
-
     # loads the form for the user to register by entering details
     form = UserRegistrationform()
     return render(request, 'sayonestories/userregistration.html', context={'form': form})
 
 
 def validate_register(request):
-
     """ this view validates the fields of the userregistration form and informs the user whether he/she have missed
     to enter data in a field or the data entered in the field is wrong. if all data entered is correct performs user
     registration  """
@@ -79,19 +78,17 @@ def validate_register(request):
 
 
 def User_home_page(request):
-
     """loads the  Home page for specific user"""
 
     pic_url = request.user.sayone_user.profile_pic
     story_object_for_user = Story.objects.filter(story_user=request.user)
 
-    all_story_objects = Story.objects.all().order_by('-date_created')
+    all_story_objects = Story.objects.all().order_by('-date_created').filter(story_status=1)
 
-    return render(request, 'sayonestories/UserHome.html', context={'img_url': pic_url,'stories':all_story_objects})
+    return render(request, 'sayonestories/UserHome.html', context={'img_url': pic_url, 'stories': all_story_objects})
 
 
 def add_story_page(request):
-
     """loads the page containing form to add story """
 
     form = StoryAddForm()
@@ -100,7 +97,6 @@ def add_story_page(request):
 
 
 def add_story(request):
-
     """ adds the story enterd by the user to the database """
     if request.method == 'POST':
         form = StoryAddForm(request.POST)
@@ -120,7 +116,6 @@ def add_story(request):
 
 
 def add_sub_story(request):
-
     """ substory is the story type (it could be Event,Blog,image gallery) . user is shown different forms depending on
      the story type . this view adds the substory to the database """
 
@@ -135,7 +130,6 @@ def add_sub_story(request):
 
 
 def add_blog(request):
-
     """ if the story type is blog or event then this view adds the blog/event to the database """
     print('call here')
     story_id = request.POST.get('storyid')
@@ -155,35 +149,21 @@ def add_blog(request):
         return render(request, 'sayonestories/addstory.html', context={})
 
 
-
-
-
-def uploadpic(request):
-    photos_list = Images.objects.all()
-    return render(request, 'sayonestories/uploadpics.html', {'photos': photos_list})
-
-
-def clear_database(request):
-    for photo in Images.objects.all():
-        photo.file.delete()
-        photo.delete()
-    return redirect(request.POST.get('next'))
-
-
 def user_stories_page(request):
-
     # loads the page containing all stories added by the specific user
     story_objects_for_user = Story.objects.filter(story_user=request.user)
     return render(request, 'sayonestories/userstories_page.html', context={'stories': story_objects_for_user})
 
 
 def story_detail_page(request, id):
-
     """loads all the details regarding the selected story .details include story title,author,date created and
     substory details .if substory is blog or event the details include title,image and description .if substory is
     image gallery details include title and images """
 
     story_obj = Story.objects.filter(story_id=id)[0]
+
+    form = AddCommentForm()
+    comments = Comments.objects.filter(story_commented=story_obj)
 
     already_liked = ''
     if Like.objects.filter(user_liked=request.user).filter(story_liked=story_obj):
@@ -196,7 +176,8 @@ def story_detail_page(request, id):
             pic_url = item.blog_pic
             blog_description = item.blog_description
 
-        context = {'blog': 'blog', 'picurl': pic_url, 'description': blog_description, 'story': story_obj,'liked':already_liked}
+        context = {'blog': 'blog', 'picurl': pic_url, 'description': blog_description, 'story': story_obj,
+                   'liked': already_liked, 'form': form, 'comments': comments}
         return render(request, 'sayonestories/story_detail_page.html', context)
     else:
         sub_story_object = story_obj.image_story.all()
@@ -211,12 +192,12 @@ def story_detail_page(request, id):
 
         for item in sub_story_object:
             print(item.file)
-        context1 = {'substory': sub_story_object, 'story': story_obj,'liked':already_liked}
+        context1 = {'substory': sub_story_object, 'story': story_obj, 'liked': already_liked, 'form': form,
+                    'comments': comments}
         return render(request, 'sayonestories/story_detail_page.html', context=context1)
 
 
-def delete_story(request,story_id):
-
+def delete_story(request, story_id):
     """ deletes the selected story and generate alert box to tell user that story has been deleted """
     item = Story.objects.get(story_id=story_id)
     item.delete()
@@ -225,7 +206,6 @@ def delete_story(request,story_id):
 
 
 def user_profile_page(request):
-
     """ shows the details of the user's profile .details include name,username,email ,profile pic and number of
     stories added by user. """
 
@@ -238,24 +218,24 @@ def user_profile_page(request):
     stories = Story.objects.filter(story_user=request.user)
     story_count = stories.count()
 
-    profile_details = {'name':name,'mailid':mailid,'username':username,'profile_pic':profile_pic,'story_count':story_count}
+    profile_details = {'name': name, 'mailid': mailid, 'username': username, 'profile_pic': profile_pic,
+                       'story_count': story_count}
 
-    print('kkk',profile_details)
-    return render(request,'sayonestories/UserProfile.html',context={'profile_details':profile_details})
+    print('kkk', profile_details)
+    return render(request, 'sayonestories/UserProfile.html', context={'profile_details': profile_details})
 
 
 def update_profile_pic(request):
-
     """ allows the user to update the profile picture """
 
-    print('test',request.FILES['pic'])
+    print('test', request.FILES['pic'])
     obj = Sayoneuser.objects.get(user=request.user)
     obj.profile_pic = request.FILES['pic']
     obj.save()
     return redirect(user_profile_page)
 
-def like_story(request,story_id):
 
+def like_story(request, story_id):
     """ allows the user to like a story .checks whether the user have already liked the story .if already liked alerts
      the user that story is liked ,else increments the like count by one. story_id is unique id of story used to check
      whether user have already liked the story """
@@ -266,17 +246,14 @@ def like_story(request,story_id):
         can_like = 'no'
     else:
         Story.objects.filter(story_id=story_id).update(story_likes=F('story_likes') + 1)
-        like = Like.objects.create(user_liked = request.user,story_liked=story)
+        like = Like.objects.create(user_liked=request.user, story_liked=story)
         can_like = 'yes'
 
-    data = {'is_valid':can_like}
+    data = {'is_valid': can_like}
     return JsonResponse(data)
 
 
-
-
-def add_multiple_pics(request,story_id):
-
+def add_multiple_pics(request, story_id):
     """ This view helps the user to load image gallery as part of his/her story . story_id is the unique id of the story
     that has been passed . story_id is used to fetch story object and map story and images in the database """
 
@@ -284,17 +261,90 @@ def add_multiple_pics(request,story_id):
     story_obj = Story.objects.filter(story_id=story_id)
     if request.method == 'POST':
 
-        form = MultiUploadForm(request.POST,request.FILES)
+        form = MultiUploadForm(request.POST, request.FILES)
         if form.is_valid():
             for each in form.cleaned_data['file']:
-                print('lll',each)
-                Images.objects.create(file=each,story=story_obj[0])
+                print('lll', each)
+                Images.objects.create(file=each, story=story_obj[0])
 
         return redirect('user_home_page')
-    else :
+    else:
         form = MultiUploadForm()
-        return render(request,'sayonestories/addstory.html',context={'form2':form})
+        return render(request, 'sayonestories/addstory.html', context={'form2': form})
 
 
+def add_comment(request, story_id):
+    print('call here')
+    story_id = story_id
+    story_obj = Story.objects.filter(story_id=story_id)
+    if request.method == 'POST':
+        form = AddCommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user_commented = request.user
+            comment.story_commented = story_obj[0]
+            comment.save()
+            return redirect('story_detail_page', id=story_id)
 
+    else:
+        form = AddCommentForm()
+        return redirect('story_detail_page', id=story_id)
+
+
+def draft_stories(request):
+    story_objects = Story.objects.filter(story_user=request.user).filter(story_status=0)
+    return render(request, 'sayonestories/draft_stories_page.html', context={'stories': story_objects})
+
+
+def draft_detail_page(request, id):
+    story_object = Story.objects.get(story_id=id)
+    sub_story = ''
+    if story_object.story_type in [0, 1]:
+        if Blog.objects.get(story=story_object):
+            sub_story = 'yes'
+        else:
+            sub_story = 'no'
+    else:
+        if Images.objects.get(story=story_object):
+            sub_story = 'yes'
+        else:
+            sub_story = 'no'
+
+
+    type = story_object.story_type
+
+    if type in [0, 1]:
+        form = AddBlog()
+    else:
+        form = MultiUploadForm()
+
+    return render(request, 'sayonestories/draft_detail_page.html', context={'form': form, 'story': story_object,'sub_story':sub_story})
+
+
+def publish_drafts(request):
+    story_id = request.POST.get('story_id')
+    story_type = request.POST.get('story_type')
+    substory = request.POST.get('substory')
+    story_obj = Story.objects.filter(story_id=story_id)[0]
+    if substory == 'yes':
+        Story.objects.filter(story_id=story_id).update(story_status=1)
+        return redirect('user_home_page')
+
+    else:
+        if story_obj.story_type in [0, 1]:
+            form = AddBlog(request.POST,request.FILES)
+            if form.is_valid():
+                blog = form.save(commit=False)
+                Story.objects.filter(story_id=story_id).update(story_status=1)
+                blog.story = story_obj
+                blog.save()
+            return redirect('user_home_page')
+        else:
+            form = MultiUploadForm(request.POST,request.FILES)
+            if form.is_valid():
+                Story.objects.filter(story_id=story_id).update(story_status=1)
+                for each in form.cleaned_data['file']:
+                    print('lll', each)
+                    Images.objects.create(file=each, story=story_obj)
+            return redirect('user_home_page')
 

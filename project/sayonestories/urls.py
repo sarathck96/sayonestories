@@ -12,8 +12,7 @@ urlpatterns = [
     path('substory',views.add_sub_story,name='add_sub_story'),
     path('addstory',views.add_story,name='add_story'),
     path('addblog',views.add_blog, name='add_blog'),
-    path('upload',views.uploadpic,name='upload_page'),
-    path('clear',views.clear_database,name='clear_images'),
+ 
     path('userstorypage',views.user_stories_page,name='user_stories_page'),
     path('storydetail/<int:id>/',views.story_detail_page,name='story_detail_page'),
     path('delete_story/<int:story_id>/',views.delete_story,name='delete_story'),
@@ -23,6 +22,13 @@ urlpatterns = [
 
 
     path('multiple_pic_upload/<int:story_id>/' ,views.add_multiple_pics,name='multiple_pic_upload'),
+
+    path('addcomment/<int:story_id>/',views.add_comment, name='add_comment'),
+    path('draftstories', views.draft_stories, name='draft_stories'),
+    path('draftdetail/<int:id>/',views.draft_detail_page, name='draft_detail_page'),
+
+    path('publishdrafts',views.publish_drafts, name='publish_drafts'),
+
 
 
 
