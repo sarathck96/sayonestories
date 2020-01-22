@@ -27,10 +27,11 @@ class Story(models.Model):
     )
     story_id = models.AutoField(primary_key=True)
     story_author = models.CharField(max_length=50)
-    story_status = models.IntegerField(choices=status_choices,default=0)
+
     story_title = models.CharField(max_length=50)
     story_likes = models.IntegerField(default=0)
     story_type = models.IntegerField(choices=story_type_choices,default=0)
+    story_status = models.IntegerField(choices=status_choices,default=0)
     
     date_created = models.DateTimeField(auto_now_add=True)
     story_user = models.ForeignKey(User,related_name='story_user',on_delete=models.CASCADE)

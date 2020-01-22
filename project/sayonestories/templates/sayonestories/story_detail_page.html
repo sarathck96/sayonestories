@@ -9,117 +9,109 @@
 
 {% block content %}
 
-<div class="container-fluid">
-
- <div class="row">
-   <div class="col-12">
-         <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-               <!-- Brand/logo -->
-               <a class="navbar-brand" href="#">
-                 <img src="{{img_url.url}}" alt="Sayone" class="rounded-circle" style="width:130px;height:100px;">
-                   {{user.sayone_user.name}}
-               </a>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <!-- Brand/logo -->
+    <a class="navbar-brand" href="#">
+        <img src="{{img_url.url}}" alt="Sayone" class="rounded-circle" style="width:130px;height:100px;">
+        {{user.sayone_user.name}}
+    </a>
 
 
-               <!-- Links -->
-               <ul class="navbar-nav ml-auto">
+    <!-- Links -->
+    <ul class="navbar-nav ml-auto">
 
-                 <li class="nav-item">
-                   <a class="nav-link lora" href="{% url 'user_profile_page' %}">My Profile </a>
-                 </li>
-                   <li class="nav-item">
-                   <a class="nav-link lora" href="{% url 'add_story_page' %}" >Add Story</a>
-                 </li>
-<li class="nav-item">
-                   <a class="nav-link lora" href="{% url 'logout' %}">Logout</a>
-                 </li>
-                    <li class="nav-item ">
-                   <a class="nav-link lora" href="{% url 'user_stories_page' %}">My Stories</a>
-                 </li>
-               </ul>
-             </nav>
-
-
-   </div>
- </div>
+        <li class="nav-item">
+            <a class="nav-link lora" href="{% url 'user_profile_page' %}">My Profile </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link lora" href="{% url 'add_story_page' %}">Add Story</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link lora" href="{% url 'logout' %}">Logout</a>
+        </li>
+        <li class="nav-item ">
+            <a class="nav-link lora" href="{% url 'user_stories_page' %}">My Stories</a>
+        </li>
+    </ul>
+</nav>
+<div class="container" style="position:relative;">
 
 
+    <div class="row">
+        <div class="col-2 ">
 
- <div class="row">
-   <div class="col-3 ">
+        </div>
+        <div class="col-8 pt-5">
 
-   </div>
-   <div class="col-6 pt-5">
+            <div class="card">
+                <div class="card-body heading2 bg-warning">{{ story.story_title}}</div>
+            </div>
+            <div class="card pt-4">
+                {% if blog %}
+                <img src="{{picurl.url}}" width="100%" height="400px">
+                {% endif %}
 
-     <div class="card">
- <div class="card-body heading2 bg-warning">{{ story.story_title}}</div>
-</div>
-     <div class="card pt-4">
-         {% if blog %}
-   <img src="{{picurl.url}}" width="100%" height="400px">
-        {% endif %}
+                {% if substory %}
 
-         {% if substory %}
+                <div class="w3-content w3-display-container">
+                    {% for item in substory %}
+                    <img class="mySlides" src="{{ item.file.url }}" style="width:100%" height="400px">
+                    {% endfor %}
 
-         <div class="w3-content w3-display-container">
-             {% for item in substory %}
-  <img class="mySlides" src="{{ item.file.url }}" style="width:100%" height="400px">
-{% endfor %}
+                    <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
+                    <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
+                </div>
+                {% endif %}
 
-  <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
-  <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
-</div>
-         {% endif %}
-
-   </div>
-     <div class="pt-2 text-right">
-       <h3 class="dancingscript">{{story.story_author}}</h3>
-       <h3 class="dancingscript">{{story.date_created}}</h3>
-
-
-     </div>
-
-     <div class="p-2 mt-2 crimson">
-       {{description}}
-     </div>
-
-     {% for comment in comments %}
-     <div class="cantarell py-2">
-     {{ comment.comment }}
-     {{ comment.user_commented.sayone_user.name}}
-</div>
-     {% endfor %}
-
-     <div >
-       <form method="POST" action="{% url 'add_comment' story.story_id %}">
-         {% csrf_token %}
-         {{ form }}
-         <button type="submit" class="btn btn-sm btn-warning">Add comment</button>
-       </form>
-     </div>
-
- </div>
+            </div>
+            <div class="pt-2 text-right">
+                <h3 class="dancingscript">{{story.story_author}}</h3>
+                <h3 class="dancingscript">{{story.date_created}}</h3>
 
 
-       <div class="col-3 my-auto">
+            </div>
+
+            <div class="p-2 mt-2 crimson">
+                {{description}}
+            </div>
+
+            {% for comment in comments %}
+            <div class="cantarell py-2">
+                <p>{{ comment.comment }}</p>
+                <p class="text-right"> -{{ comment.user_commented.sayone_user.name}} {{comment.date_commented}}</p>
+            </div>
+            {% endfor %}
+
+            <div >
+                <form method="POST" action="{% url 'add_comment' story.story_id %}">
+                    {% csrf_token %}
+                    {{ form }}
+                    <button type="submit" class="btn btn-sm btn-warning mt-2">Add comment</button>
+                </form>
+            </div>
+
+        </div>
+
+
+        <div class="col-2 my-auto">
 
             <div>
-            {% if liked == 'no' %}
+                {% if liked == 'no' %}
 
-       <img src="{% static 'images/love1.jpg' %}" width="50px" height="50px" id="like">
-       {% else %}
-       <img src="{% static 'images/love3.png' %}" width="50px" height="50px" id="like" >
-       {% endif %}
-                <div id="counter" ><b>{{story.story_likes}}</b></div>
-           </div> <br>
-
-
-
-
-   </div>
+                <img src="{% static 'images/love1.jpg' %}" width="50px" height="50px" id="like">
+                {% else %}
+                <img src="{% static 'images/love3.png' %}" width="50px" height="50px" id="like">
+                {% endif %}
+                <div id="counter"><b>{{story.story_likes}}</b></div>
+            </div>
+            <br>
 
 
-</div>
+        </div>
+
+
+
+    </div>
 
 
     <script>
@@ -140,8 +132,9 @@ function showDivs(n) {
   }
   x[slideIndex-1].style.display = "block";
 }
-</script>
-<script>
+
+    </script>
+    <script>
 var like = "{% static 'images/love3.png' %}"
 var counter = {{ story.story_likes }}
     $(document).ready(function(){
@@ -170,5 +163,9 @@ $.ajax({
 
   });
 });
-</script>
-{% endblock %}
+
+    </script>
+
+
+    {% endblock %}
+

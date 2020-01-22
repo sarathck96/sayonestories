@@ -9,7 +9,7 @@
 @import url('https://fonts.googleapis.com/css?family=Cantarell&display=swap');
 
 a {
- font-family: 'Gelasio', serif;font-size:22px;color:black;
+ font-family: 'Gelasio', serif;font-size:18px;color:black;
 }
 
 .hh {
@@ -28,10 +28,10 @@ td { font-family: 'Crimson Text', serif;font-weight:600;font-size:18px;padding:5
 
 .robotomono {font-family: 'Roboto Mono', monospace;font-weight:400;font-size:15px;}
 
- .crimson {font-family: 'Crimson Text', serif;font-weight:600;font-size:18px}
+ .crimson {font-family: 'Crimson Text', serif;font-weight:600;font-size:20px;text-align:justify;}
 
  .roboto { font-family: 'Roboto', sans-serif;font-size: 15px;}
 
  .quicksand {font-family: 'Quicksand', sans-serif;font-weight:400;font-size: 18px;}
 
- .cantarell {font-family: 'Cantarell', sans-serif;font-size: small;}
+ .cantarell {font-family: 'Cantarell', sans-serif;font-size: medium;}

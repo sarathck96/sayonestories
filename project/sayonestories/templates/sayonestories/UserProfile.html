@@ -2,16 +2,14 @@
 {% load static %}
 {% block addcss %}
 <link rel="stylesheet" href="{% static 'css/profilepic.css' %}">
+<link rel="stylesheet" href="{% static 'css/heading.css' %}">
 
 {% endblock %}
 {% block content %}
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+   <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
                 <!-- Brand/logo -->
                 <a class="navbar-brand" href="#">
-                    <img src="{{img_url.url}}" alt="Sayone" class="rounded-circle" style="width:130px;height:100px;">
+                    <img src="{{profile_details.profile_pic.url}}" alt="Sayone" class="rounded-circle" style="width:130px;height:100px;">
                     {{user.sayone_user.name}}
                 </a>
 
@@ -20,7 +18,7 @@
                 <ul class="navbar-nav ml-auto">
 
                     <li class="nav-item">
-                        <a class="nav-link lora">My Profile </a>
+                        <a class="nav-link lora"  href="{% url 'user_profile_page' %}">My Profile </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link lora" href="{% url 'add_story_page' %}">Add Story</a>
@@ -28,22 +26,31 @@
                     <li class="nav-item">
                         <a class="nav-link lora" href="{% url 'logout' %}">Logout</a>
                     </li>
-                    <li class="nav-item ">
-                        <a class="nav-link lora" href="{% url 'user_stories_page' %}">My Stories</a>
-                    </li>
+                       <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                My Stories
+                  </a>
+                  <div class="dropdown-menu">
+
+                    <a class="dropdown-item" href="{% url 'user_stories_page' %}">published</a>
+                      <a class="dropdown-item" href="{% url 'draft_stories' %}">Drafts</a>
+
+
+                  </div>
+                </li>
+
+
                 </ul>
             </nav>
+<div class="container">
 
-        </div>
 
-    </div>
-
-    <div class="row">
+    <div class="row mt-4">
         <div class="col-3"></div>
         <div class="col-6 mt-4 rounded-sm border">
 
             <div class="row m-4">
-                <div class="col-6" >
+                <div class="col-12" >
                     <table>
                         <tr>
                             <td>Name</td>
@@ -63,19 +70,19 @@
                         </tr>
                     </table>
 
-                </div>
 
-                <div class="col-6" >
-                    <img src="{{profile_details.profile_pic.url}}" width="120px" height="120px">
+
+
+                    <img src="{{profile_details.profile_pic.url}}" width="120px" height="120px" class="rounded-sm">
 
                     <form method="POST" action="{% url 'update_profile_pic' %}" enctype="multipart/form-data">
                         {% csrf_token %}
 
-                        <div class="file btn btn-sm btn-primary">
+                        <div class="file btn btn-sm btn-info mt-2">
                             Change
                             <input type="file" name="pic"/>
                         </div>
-                        <button class="btn-warning btn btn-sm" type="submit" >save</button>
+                        <button class="btn-warning btn btn-sm mt-2" type="submit" ><b>save</b></button>
                     </form>
 
                 </div>

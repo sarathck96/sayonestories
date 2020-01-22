@@ -85,7 +85,19 @@ def User_home_page(request):
 
     all_story_objects = Story.objects.all().order_by('-date_created').filter(story_status=1)
 
-    return render(request, 'sayonestories/UserHome.html', context={'img_url': pic_url, 'stories': all_story_objects})
+    stories = []
+    for item in all_story_objects:
+        type = item.story_type
+        if type in [0, 1]:
+            if item.blog_story.all().exists():
+                stories.append(item)
+        else:
+            pass
+
+
+
+
+    return render(request, 'sayonestories/UserHome.html', context={'img_url': pic_url, 'stories': stories})
 
 
 def add_story_page(request):
@@ -151,7 +163,7 @@ def add_blog(request):
 
 def user_stories_page(request):
     # loads the page containing all stories added by the specific user
-    story_objects_for_user = Story.objects.filter(story_user=request.user)
+    story_objects_for_user = Story.objects.filter(story_user=request.user).filter(story_status=1)
     return render(request, 'sayonestories/userstories_page.html', context={'stories': story_objects_for_user})
 
 
@@ -305,7 +317,7 @@ def draft_detail_page(request, id):
         else:
             sub_story = 'no'
     else:
-        if Images.objects.get(story=story_object):
+        if Images.objects.filter(story=story_object):
             sub_story = 'yes'
         else:
             sub_story = 'no'
