@@ -3,15 +3,22 @@ from django.contrib.auth.models import User
 from django.core import validators
 from django.core.validators import MinLengthValidator
 from django.core.exceptions import ValidationError
+from upload_validator import FileTypeValidator
+from django.contrib.auth.password_validation import validate_password
+
 
 
 class Sayoneuser(models.Model):
     name = models.CharField(max_length=70, validators=[MinLengthValidator(5)])
     mailid = models.EmailField(max_length=70)
     username = models.CharField(max_length=70)
-    password = models.CharField(max_length=30)
+    password = models.CharField(max_length=30,validators=[validate_password])
     cnf_pass = models.CharField(max_length=30)
-    profile_pic = models.ImageField(upload_to='images',default='images/default_pic.jpg',null=True,blank=True)
+    profile_pic = models.ImageField(upload_to='images',default='images/default_pic.jpg',null=True,blank=True,
+                                    validators=[FileTypeValidator(
+                                        allowed_types=['image/jpeg', 'image/png']
+                                    )]
+                                    )
     user = models.OneToOneField(User, related_name='sayone_user', on_delete=models.CASCADE)
 
 class Story(models.Model):
@@ -40,7 +47,7 @@ class Blog(models.Model):
     blog_id = models.AutoField(primary_key=True)
     blog_pic = models.ImageField(upload_to='images')
     blog_description = models.CharField(max_length=5000)
-    story = models.ForeignKey(Story,on_delete=models.CASCADE,related_name='blog_story')
+    story = models.OneToOneField(Story,on_delete=models.CASCADE,related_name='blog_story')
 
 class Images(models.Model):
     file = models.ImageField(upload_to='images')

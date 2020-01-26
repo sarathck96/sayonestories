@@ -28,6 +28,14 @@ urlpatterns = [
     path('draftdetail/<int:id>/',views.draft_detail_page, name='draft_detail_page'),
 
     path('publishdrafts',views.publish_drafts, name='publish_drafts'),
+    path('testing',views.test, name='testing'),
+    path('edit_profile',views.edit_profile_page, name='edit_profile'),
+    path('storydetail2/<int:id>/',views.story_detail_page2, name='story_detail_page2'),
+    path('showevents',views.show_events,name='show_events'),
+    path('showblogs',views.show_blogs,name='show_blogs'),
+    path('showgallery',views.show_gallery, name='show_gallery'),
+    path('topauthors',views.top_authors,name='top_authors'),
+  
 
 
 

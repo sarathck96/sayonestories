@@ -1,5 +1,5 @@
 
-{% extends 'base_layout.html' %}
+{% extends 'base_layout2.html' %}
 {% load static %}
 
 {% block addcss %}
@@ -8,48 +8,22 @@
 {% endblock %}
 
 {% block content %}
-  <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-               <!-- Brand/logo -->
-               <a class="navbar-brand" href="#">
-                 <img src="{{img_url.url}}" alt="Sayone" class="rounded-circle" style="width:130px;height:100px;">
-                   {{user.sayone_user.name}}
-               </a>
 
-
-               <!-- Links -->
-               <ul class="navbar-nav ml-auto">
-
-                 <li class="nav-item">
-                   <a class="nav-link lora" href="{% url 'user_profile_page' %}" >My Profile </a>
-                 </li>
-                   <li class="nav-item">
-                   <a class="nav-link lora" href="{% url 'add_story_page' %}" >Add Story</a>
-                 </li>
-<li class="nav-item">
-                   <a class="nav-link lora" href="{% url 'logout' %}">Logout</a>
-                 </li>
-
-                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                My Stories
-                  </a>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item" href="{% url 'user_stories_page' %}">published</a>
-                    <a class="dropdown-item" href="{% url 'draft_stories' %}">Drafts</a>
-
-                  </div>
-                </li>
-               </ul>
-             </nav>
 <div class="container">
 
    <div class="row pt-4">
-       <div class="col-3"></div>
-       <div class="col-6">
+     
+       <div class="col-md-12">
            {% for story in stories %}
-           <div class="card mt-2">
+           {% if story.story_type == 0 or story.story_type == 1 %}
+<div class="col-md-4" style="float:left;">
+           <div class="card mt-2" >
+               <img class="card-img-top"  src="{{story.blog_story.blog_pic.url}}" width="100%" height="250px;">
                <div class="card-body pb-3">
                    <table ><tr ><a href="{% url 'story_detail_page' story.story_id%}">{{story.story_title}}</a></tr>
+                    <tr><td colspan="2">
+                        {{story.blog_story.blog_description|truncatewords:10 }}
+                    </td></tr>
                        <tr><td>Author</td>
                            <td>{{story.story_author}}</td></tr>
                        <tr><td>Created on</td><td>{{story.date_created}}</td></tr>
@@ -67,13 +41,50 @@
                        </tr>
                    </table>
                </div>
+               
 </div>
+</div>
+{% else %}
+<div class="col-md-4" style="float:left;">
+        <div class="card mt-2" >
+            
+            <img src="{{story.image_story.first.file.url}}" width="100%" height="200px">
+           
+
+         
+            <div class="card-body pb-3">
+                <table ><tr ><a href="{% url 'story_detail_page' story.story_id%}">{{story.story_title}}</a></tr>
+                
+                    <tr><td>Author</td>
+                        <td>{{story.story_author}}</td></tr>
+                    <tr><td>Created on</td><td>{{story.date_created}}</td></tr>
+                    <tr><td>Story Type</td>
+                    <td>
+                        {% if story.story_type == 0 %}
+                        <span class="badge badge-success">Event</span>
+                        {% elif story.story_type == 1 %}
+                        <span class="badge badge-info">Blog</span>
+                        {% elif story.story_type == 2 %}
+                        <span class="badge badge-warning">Image Gallery</span>
+                        {% endif %}
+                    </td>
+
+                    </tr>
+                </table>
+            </div>
+            
+</div>
+</div>
+{% endif %}
+
            {% endfor %}
        </div>
-       <div class="col-3"></div>
+       
+       
+    
    </div>
 </div>
 
 
-
+<footer class="footer_bottom"></footer>
 {% endblock %}

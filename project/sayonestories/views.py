@@ -8,19 +8,25 @@ from django.views import View
 from django.core.mail import EmailMessage
 from django.views.generic.edit import FormView
 
-from .forms import UserRegistrationform, StoryAddForm, AddBlog, PhotoForm, MultiUploadForm, AddCommentForm
+from .forms import UserRegistrationform, StoryAddForm, AddBlog, PhotoForm, MultiUploadForm, AddCommentForm,EditProfileForm
 from django.forms import ValidationError, forms
 from django.contrib.auth.models import User
 from .models import Story, Blog, Images, Sayoneuser, Like, Comments
 from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Count
 
 
 # Create your views here.
 
 def home(request):
     # Loads the home page of the application sayone stories
-    return render(request, 'sayonestories/home.html', context={})
+    top_events = Story.objects.filter(story_type=0).order_by('-story_likes')[:3]
+    top_blogs = Story.objects.filter(story_type=1).order_by('-story_likes')[:3]
+    top_gallery = Story.objects.filter(story_type=2).order_by('-story_likes')[:3]
+
+    context = {'events':top_events,'blogs':top_blogs,'gallery':top_gallery}
+    return render(request, 'sayonestories/home.html',context )
 
 
 def userregisterform(request):
@@ -42,6 +48,7 @@ def validate_register(request):
             email = userObj['mailid']
             password = userObj['password']
             cnf_password = userObj['cnf_pass']
+            name = userObj['name']
 
             error_codes = []
             if User.objects.filter(email=email).exists():
@@ -62,7 +69,7 @@ def validate_register(request):
                 form.errors['password'] = form.error_class(['passwords did not match'])
 
             if len(error_codes) == 0:
-                sayoneuser = User.objects.create_user(username=username, email=email, password=password)
+                sayoneuser = User.objects.create_user(first_name =name, username=username, email=email, password=password)
                 sayone.user = sayoneuser
                 sayone.save()
                 return redirect('home')
@@ -81,23 +88,16 @@ def User_home_page(request):
     """loads the  Home page for specific user"""
 
     pic_url = request.user.sayone_user.profile_pic
-    story_object_for_user = Story.objects.filter(story_user=request.user)
+  
 
     all_story_objects = Story.objects.all().order_by('-date_created').filter(story_status=1)
 
-    stories = []
-    for item in all_story_objects:
-        type = item.story_type
-        if type in [0, 1]:
-            if item.blog_story.all().exists():
-                stories.append(item)
-        else:
-            pass
+  
 
 
 
 
-    return render(request, 'sayonestories/UserHome.html', context={'img_url': pic_url, 'stories': stories})
+    return render(request, 'sayonestories/UserHome.html', context={'img_url': pic_url, 'stories': all_story_objects})
 
 
 def add_story_page(request):
@@ -123,7 +123,7 @@ def add_story(request):
         else:
             return render(request, 'sayonestories/addstory.html', context={'form': form})
     else:
-        form = StoryAddForm()
+        
         render(request, 'sayonestories/addstory.html', context={'form': form})
 
 
@@ -156,7 +156,7 @@ def add_blog(request):
             blog.save()
             return redirect('user_home_page')
         else:
-            return render(request, 'sayonestories/addstory.html', context={})
+            return render(request, 'sayonestories/addstory.html', context={'form1':form})
     else:
         return render(request, 'sayonestories/addstory.html', context={})
 
@@ -184,23 +184,15 @@ def story_detail_page(request, id):
         already_liked = 'no'
 
     if story_obj.story_type in [0, 1]:
-        for item in story_obj.blog_story.all():
-            pic_url = item.blog_pic
-            blog_description = item.blog_description
 
-        context = {'blog': 'blog', 'picurl': pic_url, 'description': blog_description, 'story': story_obj,
+        context = {'blog': 'blog', 'story': story_obj,
                    'liked': already_liked, 'form': form, 'comments': comments}
         return render(request, 'sayonestories/story_detail_page.html', context)
     else:
         sub_story_object = story_obj.image_story.all()
         print(sub_story_object)
 
-        count = story_obj.image_story.count()
-
-        data_slide = []
-
-        for i in range(0, count):
-            data_slide.append(i)
+       
 
         for item in sub_story_object:
             print(item.file)
@@ -360,3 +352,79 @@ def publish_drafts(request):
                     Images.objects.create(file=each, story=story_obj)
             return redirect('user_home_page')
 
+def test(request):
+    test_obj = Story.objects.get(story_id=3)
+    print('ttt',test_obj.image_story.all()[0].file)
+
+def edit_profile_page(request):
+
+    
+    form = EditProfileForm(instance=request.user)
+    print('fff',form)
+    if form.is_valid():
+        form.save()
+        return redirect('user_profile_page')
+    else:
+        form = EditProfileForm(instance=request.user)
+
+        return render(request,'sayonestories/edit_profile.html',context={'form':form})
+                     
+
+
+
+def story_detail_page2(request,id):
+    story_obj = Story.objects.filter(story_id=id)[0]
+    comments = Comments.objects.filter(story_commented=story_obj)
+    if story_obj.story_type in [0, 1]:
+
+        context = {'blog': 'blog', 'story': story_obj, 'comments': comments}
+        return render(request, 'sayonestories/story_detail_page2.html', context)
+    else:
+        sub_story_object = story_obj.image_story.all()
+        print(sub_story_object)
+
+       
+
+        for item in sub_story_object:
+            print(item.file)
+        context1 = {'substory': sub_story_object, 'story': story_obj,'comments': comments}
+        return render(request, 'sayonestories/story_detail_page2.html', context=context1)
+
+
+def show_events(request):
+    all_event_objects = Story.objects.all().order_by('-date_created').filter(story_status=1).filter(story_type=0)
+    return render(request,'sayonestories/events_page.html',context={'stories':all_event_objects})
+
+def show_blogs(request):
+    all_blog_objects = Story.objects.all().order_by('-date_created').filter(story_status=1).filter(story_type=1)
+    print('blogs',all_blog_objects)
+    return render(request,'sayonestories/blogs_page.html',context={'stories':all_blog_objects})
+
+def show_gallery(request):
+    all_gallery_objects = Story.objects.all().order_by('-date_created').filter(story_status=1).filter(story_type=2)
+    return render(request,'sayonestories/image_gallery_page.html',context={'stories':all_gallery_objects})
+
+def top_authors(request):
+    test = Story.objects.values('story_user_id').annotate(story_user_count=Count('story_user')).order_by('-story_user_count')[:2]
+    top_users = []
+    users_id = []
+    count = []
+    for item in test:
+        users_id.append(item['story_user_id'])
+        count.append(item['story_user_count'])
+    
+    for id in users_id:
+        user_obj= Sayoneuser.objects.get(user=id)
+        temp_dict = {}
+        temp_dict['name']=user_obj.name
+        temp_dict['mailid']=user_obj.mailid
+        temp_dict['profile_pic']=user_obj.profile_pic
+        top_users.append(temp_dict)
+    
+    top_users[0]['count']=count[0]
+    top_users[1]['count']=count[1]
+    
+
+        
+    return render(request,'sayonestories/top_authors.html',context={'authors':top_users})
+            

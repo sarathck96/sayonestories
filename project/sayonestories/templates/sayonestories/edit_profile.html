@@ -1,0 +1,45 @@
+{% extends 'base_layout2.html' %}
+{% load static %}
+{% block addcss %}
+<link rel="stylesheet" href="{% static 'css/profilepic.css' %}">
+<link rel="stylesheet" href="{% static 'css/heading.css' %}">
+
+{% endblock %}
+{% block content %}
+
+<div class="container">
+
+<div class="row mt-4">
+
+    <div class="col-md-3"></div>
+
+    <div class="col-md-6">
+
+    <form method="POST">
+        {% csrf_token %}
+       {% for fields in form %}
+       {{ fields.label_tag }}
+       {{fields}}
+       {% endfor %}
+
+        <button type="submit">Save</button>
+    </form>
+  
+
+
+   
+
+</div>
+       
+     <div class="col-md-3"></div> 
+
+
+                    
+
+        
+
+
+
+</div>
+
+{% endblock %}

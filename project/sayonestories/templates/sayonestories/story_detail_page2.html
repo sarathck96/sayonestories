@@ -10,7 +10,7 @@
 {% block content %}
 
 
-<div class="container" >
+<div class="container" style="position:relative;">
 
 
     <div class="row">
@@ -58,13 +58,7 @@
             </div>
             {% endfor %}
 
-            <div >
-                <form method="POST" action="{% url 'add_comment' story.story_id %}">
-                    {% csrf_token %}
-                    {{ form }}
-                    <button type="submit" class="btn btn-sm btn-warning mt-2">Add comment</button>
-                </form>
-            </div>
+           
 
         </div>
 
@@ -72,13 +66,10 @@
         <div class="col-2 my-auto">
 
             <div>
-                {% if liked == 'no' %}
-
-                <img src="{% static 'images/love1.jpg' %}" width="50px" height="50px" id="like">
-                {% else %}
+               
                 <img src="{% static 'images/love3.png' %}" width="50px" height="50px" id="like">
-                {% endif %}
-                <div id="counter"><b>{{story.story_likes}}</b></div>
+                
+                <div><b>{{story.story_likes}}</b></div>
             </div>
             <br>
 
@@ -141,8 +132,7 @@ $.ajax({
 });
 
     </script>
-</div>
-<footer class="footer_bottom"></footer>
+
 
     {% endblock %}
-   
+

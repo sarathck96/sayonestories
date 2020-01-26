@@ -5,6 +5,7 @@ from .models import Sayoneuser, Story, Blog, Images ,Comments
 from django.core import validators
 from django.contrib.auth.models import User
 from multiupload.fields import MultiFileField
+from django.contrib.auth.forms import UserChangeForm
 
 class UserRegistrationform(forms.ModelForm):
     class Meta:
@@ -31,18 +32,18 @@ class UserRegistrationform(forms.ModelForm):
 class StoryAddForm(forms.ModelForm):
     class Meta:
         model = Story
-        exclude = ('story_user','story_author','story_likes')
+        exclude = ('story_user','story_author','story_likes','story_status')
 
         widgets = {
             'story_title':forms.TextInput(attrs={'class':'form-control'}),
             'story_type':forms.Select(attrs={'class':'form-control'}),
-            'story_status':forms.Select(attrs={'class':'form-control'}),
+            
         }
 
         labels = {
             'story_title': 'Story Title',
             'story_type': 'Story Type',
-            'story_status':'Story Status',
+            
 
         }
 
@@ -85,3 +86,17 @@ class AddCommentForm(forms.ModelForm):
            'comment': forms.TextInput(attrs={'class':'form-control'})
 
        }
+
+
+class EditProfileForm(UserChangeForm):
+    class Meta:
+        model = User
+        fields = (
+            'first_name',
+            
+           
+        )
+
+        
+
+     
