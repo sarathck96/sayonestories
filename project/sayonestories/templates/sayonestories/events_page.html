@@ -16,8 +16,8 @@
        <div class="col-md-12">
            {% for story in stories %}
           
-<div class="col-md-4" >
-           <div class="card mt-2" style="float:left;">
+<div class="col-md-4" style="float:left;" >
+           <div class="card mt-2" >
                <img class="card-img-top"  src="{{story.blog_story.blog_pic.url}}" width="100%" height="250px;">
                <div class="card-body pb-3">
                    <table ><tr ><a href="{% url 'story_detail_page' story.story_id%}">{{story.story_title}}</a></tr>
@@ -49,6 +49,7 @@
     
    </div>
 </div>
+
 
 
 {% endblock %}
