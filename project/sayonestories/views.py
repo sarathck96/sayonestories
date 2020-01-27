@@ -358,16 +358,17 @@ def test(request):
 
 def edit_profile_page(request):
 
-    
-    form = EditProfileForm(instance=request.user)
-    print('fff',form)
-    if form.is_valid():
-        form.save()
-        return redirect('user_profile_page')
-    else:
-        form = EditProfileForm(instance=request.user)
+    profile_details = {}
+    profile_details['name']=request.user.sayone_user.name
+    profile_details['mailid']=request.user.sayone_user.mailid
+    profile_details['username']=request.user.username
+    profile_details['profile_pic']=request.user.sayone_user.profile_pic
 
-        return render(request,'sayonestories/edit_profile.html',context={'form':form})
+    qset = Story.objects.filter(story_user=request.user)
+
+    profile_details['stories']=len(qset)
+   
+    return render(request,'sayonestories/edit_profile.html',context={'profile_details':profile_details})
                      
 
 

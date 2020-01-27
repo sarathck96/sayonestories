@@ -9,7 +9,7 @@
 
 {% block content %}
 
-<div class="container">
+<div class="container cc" >
     <div class="row">
         <div class="col-12">
 
@@ -18,13 +18,24 @@
         <div class="col-3"></div>
         <div class="col-6 crimson mt-4">
             {% if story %}
-            story title :{{story.story_title }}<br>
-            story type :{% if story.story_type == 0 %} Event
+            <table>
+                <tr>
+                    <td>story title :</td>
+                    <td>{{story.story_title }}</td>
+                </tr>
+            <tr>
+                <td>
+            story type :</td><td>{% if story.story_type == 0 %} Event
                         {% elif story.story_type == 1 %}Blog
                         {% elif story.story_type == 2 %} Pic Gallery
-                        {% endif %} <br>
-            Date created {{ story.date_created }}<br>
-            Author {{story.story_author }}
+                        {% endif %}</td> 
+                        </tr>
+                        <tr>
+                            <td>
+            Date created:</td><td>{{ story.date_created }}</td>
+            </tr>
+            <tr><td>Author</td> <td>{{story.story_author }}</td></tr>
+            </table>
 
             {% endif %}
             {% if form %}
@@ -66,5 +77,5 @@
         </div>
 
 
-
+        
 {% endblock %}

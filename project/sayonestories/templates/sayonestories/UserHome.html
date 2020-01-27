@@ -22,7 +22,7 @@
                <div class="card-body pb-3">
                    <table ><tr ><a href="{% url 'story_detail_page' story.story_id%}">{{story.story_title}}</a></tr>
                     <tr><td colspan="2">
-                        {{story.blog_story.blog_description|truncatewords:10 }}
+                        {{story.blog_story.blog_description|truncatewords:8 }}
                     </td></tr>
                        <tr><td>Author</td>
                            <td>{{story.story_author}}</td></tr>
@@ -48,13 +48,17 @@
 <div class="col-md-4" style="float:left;">
         <div class="card mt-2" >
             
-            <img src="{{story.image_story.first.file.url}}" width="100%" height="200px">
+            <img src="{{story.image_story.first.file.url}}" width="100%" height="250px">
            
 
          
             <div class="card-body pb-3">
                 <table ><tr ><a href="{% url 'story_detail_page' story.story_id%}">{{story.story_title}}</a></tr>
-                
+                <tr>
+                    <div  style="height:65px;">
+
+                    </div>
+                </tr>
                     <tr><td>Author</td>
                         <td>{{story.story_author}}</td></tr>
                     <tr><td>Created on</td><td>{{story.date_created}}</td></tr>
@@ -86,5 +90,7 @@
 </div>
 
 
-<footer class="footer_bottom"></footer>
+<footer class="footer_bottom">
+    <h5>@Sayone Technologies 2020</h5>
+</footer>
 {% endblock %}

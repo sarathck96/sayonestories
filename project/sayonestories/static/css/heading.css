@@ -61,13 +61,14 @@ td { font-family: 'Crimson Text', serif;font-weight:600;font-size:18px;padding:5
  } */
 
  .footer_bottom {
-    position: absolute;
+    position: relative;
     right: 0;
     bottom: 0;
     left: 0;
     padding: 1rem;
-    height:100px;margin-top:100px;
-    background-color: #9b0f0f;
+    height:80px;
+    margin-top:100px;
+    background-color: #f8f9fa;
     text-align: center;
   }
  

@@ -17,11 +17,16 @@
                 <img class="card-img-top" src="{{profile_details.profile_pic.url}}" alt="Card image" height="200px">
                 
                 <div class="card-body">
-                        <h3 class="card-title">{{profile_details.name}}</h4>
-                        <p class="card-text">Username:{{profile_details.username}}</p>
-                        <p class="card-text">Email ID:{{profile_details.mailid}}</p>
-                        <p class="card-text">Stories:{{profile_details.story_count}}</p>
+                    <table>
+                        <tr>
+                        <h3 class="card-title">{{profile_details.name}}</h4></tr>
+                       <tr><td>Username:</td><td>{{profile_details.username}}</td></tr>
+                       <tr><td>Email ID:</td><td>{{profile_details.mailid}}</td></tr>
+                        <tr><td>Stories:</td><td>{{profile_details.story_count}}</td></tr>
+                        <tr>
                        <a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit profile</a>
+                       </tr>
+                        </table>
                       </div>
 
 
@@ -40,4 +45,7 @@
 
 </div>
 
+<footer class="footer_bottom">
+    <h5>@Sayone Technologies 2020</h5>
+</footer>
 {% endblock %}

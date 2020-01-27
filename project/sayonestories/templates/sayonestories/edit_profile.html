@@ -9,33 +9,54 @@
 
 <div class="container">
 
-<div class="row mt-4">
 
-    <div class="col-md-3"></div>
+    <div class="row mt-4">
+        <div class="col-3"></div>
+        <div class="col-6 mt-4 rounded-sm border" style="background-color: white;">
 
-    <div class="col-md-6">
+            <div class="row m-4">
+                <div class="col-12" >
+                    <table>
+                        <tr>
+                            <td>Name</td>
+                            <td>{{ profile_details.name}}</td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td>{{ profile_details.mailid}}</td>
+                        </tr>
+                        <tr>
+                            <td>Username</td>
+                            <td>{{ profile_details.username}}</td>
+                        </tr>
+                        <tr>
+                            <td>Stories</td>
+                            <td>{{ profile_details.stories}}</td>
+                        </tr>
+                    </table>
 
-    <form method="POST">
-        {% csrf_token %}
-       {% for fields in form %}
-       {{ fields.label_tag }}
-       {{fields}}
-       {% endfor %}
-
-        <button type="submit">Save</button>
-    </form>
-  
 
 
-   
 
-</div>
-       
-     <div class="col-md-3"></div> 
+                    <img src="{{profile_details.profile_pic.url}}" width="120px" height="120px" class="rounded-sm">
 
+                    <form method="POST" action="{% url 'update_profile_pic' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
 
-                    
+                        <div class="file btn btn-sm btn-info mt-2">
+                            Change
+                            <input type="file" name="pic"/>
+                        </div>
+                        <button class="btn-warning btn btn-sm mt-2" type="submit" ><b>save</b></button>
+                    </form>
 
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-3"></div>
+    </div>
         
 
 
