@@ -7,32 +7,7 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Cantarell&display=swap');
-/* 
-*,
-*:before,
-*:after {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing:    border-box;
-  box-sizing:         border-box;
-}
 
-html {
-  height: 100%;
-} */
-
-body {
-  min-height: 100%;
-  display:flex; 
-  flex-direction:column; 
- 
-  /* padding-bottom: 4rem;
-  min-height: 100%;
-  font-family: "Helvetica Neue", Arial, sans-serif; */
-}
-
-.ff {
-  flex: 1;
-}
 
 a {
  font-family: 'Gelasio', serif;font-size:18px;color:black;
@@ -66,32 +41,27 @@ td { font-family: 'Crimson Text', serif;font-weight:600;font-size:18px;padding:5
      background-color:aqua;position:relative;height:100px;margin-top:100px;clear:both;
  } */
 
- .footer_bottom {
-    position: relative;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    padding: 1rem;
-    height:80px;
-    margin-top:100px;
-    background-color: #f8f9fa;
-    text-align: center;
-  }
- 
- .cc {
-     min-height: 100%;
- }
+
 
  .footer {
-  flex-shrink: 0; /* Prevent Chrome, Opera, and Safari from letting these items shrink to smaller than their content's default minimum size. */
-  padding: 20px;
+  position: relative;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  color:#000000;
+
+  text-align: center;
+  height:60px;
+  background-color:#f8f9fa;
+
 }
 
-.footer2 {
-    background-color: #f8f9fa;
-    clear: both;
-    position: relative;
-    height: 80px;
-    margin-top:150px; 
-
+.mb {
+margin-bottom :10%;
+}
+.mb2 {
+margin-bottom:15%;
+}
+.mb3 {
+margin-bottom:22%;
 }

@@ -429,3 +429,37 @@ def top_authors(request):
         
     return render(request,'sayonestories/top_authors.html',context={'authors':top_users})
             
+
+def edit_story_page(request, id):
+   story_obj = Story.objects.get(story_id=id)
+   story_type = story_obj.story_type
+   story_title = story_obj.story_title
+   story_pic = story_obj.blog_story.blog_pic
+
+ 
+   if story_type in [0, 1]:
+       context = {'blog': 'blog', 'title': story_title, 'description': story_obj.blog_story.blog_description,
+                  'pic': story_obj.blog_story.blog_pic, 'id': story_obj.story_id}
+       return render(request, 'sayonestories/story_edit_page.html', context)
+   else:
+       context = {'title': story_title, 'id': story_obj.story_id}
+       return render(request, 'sayonestories/story_edit_page.html', context)
+
+
+
+def edit_story(request):
+   story_id = request.POST.get('id')
+   print('id',story_id)
+   story_title = request.POST.get('title')
+   story_description = request.POST.get('description')
+   story_pic = request.FILES.get('newpic')
+
+   story_obj = Story.objects.filter(story_id=story_id).first()
+   story_obj.story_title = story_title
+   story_obj.save()
+
+   blog_obj = Blog.objects.filter(story=story_obj).first()
+   blog_obj.blog_description = story_description
+   blog_obj.blog_pic = story_pic
+   blog_obj.save()
+   return redirect('story_detail_page', id=story_id)

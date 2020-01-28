@@ -35,6 +35,8 @@ urlpatterns = [
     path('showblogs',views.show_blogs,name='show_blogs'),
     path('showgallery',views.show_gallery, name='show_gallery'),
     path('topauthors',views.top_authors,name='top_authors'),
+    path('editstorypage/<int:id>/',views.edit_story_page,name='edit_story_page'),
+    path('editstory',views.edit_story,name='edit_story'),
   
 
 

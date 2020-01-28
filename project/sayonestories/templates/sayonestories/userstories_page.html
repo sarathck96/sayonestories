@@ -1,11 +1,9 @@
 {% extends 'base_layout2.html' %}
 {% load static %}
-{% block addcss %}
-<link rel="stylesheet" href="{% static 'css/heading.css' %}">
-{% endblock %}
+
 {% block content %}
 
-<div class="conatainer-fluid">
+<div class="conatainer-fluid mb">
        {% if messages %}
        {% for message in messages %}
 <script>
@@ -13,12 +11,7 @@
 </script>
        {% endfor %}
        {% endif %}
-<div class="row">
 
-    <div class="col-12">
-
-    </div>
-</div>
 
    <div class="row pt-4">
 
@@ -45,7 +38,8 @@
                        </td>
 
                        </tr>
-                       <tr><td><button onclick="deleteitem('{% url 'delete_story' story.story_id %}');" class="btn btn-danger btn-sm" id="myBtn" data-toggle="modal" data-target="#myModal">Delete</button> </td></tr>
+                       <tr><td><button onclick="deleteitem('{% url 'delete_story' story.story_id %}');" class="btn btn-danger btn-sm" id="myBtn" data-toggle="modal" data-target="#myModal">Delete</button> </td>
+                      <td><a class="btn btn-sm btn-info" href="{% url 'edit_story_page' story.story_id %}">Edit story</a></td></tr>
                    </table>
                </div>
 </div>
@@ -108,5 +102,6 @@
     </script>
 
 
+</div>
 </div>
 {% endblock %}
