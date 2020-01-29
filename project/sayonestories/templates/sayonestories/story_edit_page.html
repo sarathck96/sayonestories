@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-<div class="container">
+<div class="container mb">
     <div class="row">
         <div class="col-md-2">
 
@@ -40,7 +40,18 @@
     </td>
 </tr>
 
+{% else %}
+
+{% for item in story.image_story.all %}
+<tr>
+    <td>
+        <img src="{{item.file.url}}" width="100px" height="100px">
+    </td>
+    
+</tr>
+{% endfor %}
 {% endif %}
+
 <tr>
     <td>
         <button type="submit" class="btn btn-warning">Save</button>
